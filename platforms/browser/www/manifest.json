@@ -1,0 +1,11 @@
+{
+  "background_color": "#FFF",
+  "display": "standalone",
+  "name": "First app",
+  "short_name": "First app",
+  "version": "io.cordova.helloworld",
+  "description": "App by Aleksy Bernaciak",
+  "author": "Aleksy Bernaciak",
+  "icons": [],
+  "start_url": "index.html"
+}
