@@ -17,6 +17,7 @@
     "cordova-plugin-browsersync": "^1.1.0",
     "cordova-plugin-whitelist": "1",
     "onsenui": "~2.6.1",
+    "v-autocomplete": "^1.8.0",
     "vue": "^2.5.0",
     "vue-axios": "^2.0.2",
     "vue-onsenui": "~2.2.1",

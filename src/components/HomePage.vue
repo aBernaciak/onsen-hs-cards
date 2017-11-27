@@ -21,6 +21,15 @@
         Card
       </v-ons-list-header>
       <v-ons-list-item>
+        <div class="center">
+          <v-ons-input placeholder="Search for card by name" float v-model="name" @keyup.enter="search(name)">
+          </v-ons-input>
+        </div>
+      </v-ons-list-item>
+      <v-ons-list-item>
+        <v-ons-button modifier="large" @click="search(name)">Search</v-ons-button>
+      </v-ons-list-item>
+      <v-ons-list-item>
         <div class="card-container" :class="{flipped : ifCardChosen}">
           <img src="../assets/cardback_0.png" alt="" class="card-initial">
           <img :src="cardChosen[0].src" alt="" class="card-flipped" v-if="ifCardChosen">
@@ -43,23 +52,19 @@
           {{cardChosen[0].howToEarnGolden}}
         </div>
       </v-ons-list-item>
-    </v-ons-list>
-    <v-ons-list>
-      <v-ons-list-header>
-        Search for card
-      </v-ons-list-header>
       <v-ons-list-item>
-        <div class="center">
-          <v-ons-input placeholder="Search for card by name" float v-model="name" @keyup.enter="search(name)">
-          </v-ons-input>
-        </div>
+        <v-autocomplete :items="itemsSorted" :get-label="getLabel" :component-item='template' @update-items='update' v-model='item' keep-open="true" :inputAttrs="{}">
+        </v-autocomplete>
       </v-ons-list-item>
       <v-ons-list-item>
-        <v-ons-button modifier="large" @click="search(name)">Search</v-ons-button>
+        asd
+      </v-ons-list-item>
+      <v-ons-list-item>
+        asdas
       </v-ons-list-item>
     </v-ons-list>
 
-    <v-ons-action-sheet :visible.sync="actionSheetVisible" cancelable title="Chane language">
+    <v-ons-action-sheet :visible.sync="actionSheetVisible" cancelable title="Change language">
       <v-ons-action-sheet-button icon="md-square-o" v-for="(lang, index) in langArray" @click="changeLanguage(lang)">
         {{lang}}
       </v-ons-action-sheet-button>
@@ -71,11 +76,15 @@
 </template>
 
 <script>
+import ItemTemplate from './ItemTemplate.vue'
 
 export default {
   name: 'home',
   data () {
     return {
+      item: {id: 9, name: 'Lion', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'},
+      itemsSorted: [],
+      template: ItemTemplate,
       actionSheetVisible: false,
       cardArray: [],
       langArray: ['enUS', 'plPL', 'DeDE'],
@@ -86,6 +95,17 @@ export default {
     }
   },
   methods: {
+    update (text) {
+      console.log(text)
+      var itamz = this.cardArray;
+      this.itemsSorted = itamz.filter((item) => {
+        console.log(this.toTitleCase(item.name))
+        return (new RegExp(this.toTitleCase(text))).test(this.toTitleCase(item.name))
+      })
+    },
+     getLabel (item) {
+      return item.name
+    },
     toTitleCase(str) {
       return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
     },
@@ -146,16 +166,13 @@ export default {
   margin: 0 auto;
   transform: rotateY(0);
   transform-style: preserve-3d;
-  transition: all .3s linear;
+  transition: all .6s linear;
   width: 256px;
   height: 382px;
   position: relative;
   margin: -30px auto -30px;
   &.flipped {
     transform: rotateY(180deg);
-    .card-flipped {
-      // opacity: 1;
-    }
   }
   img {
     &.card-initial {
@@ -166,7 +183,6 @@ export default {
       transition: opacity 0.5s linear;
       transform: rotateY(180deg);
       transform: rotate3d(0, 1, 0, 180deg);
-      // opacity: 0;
     }
   }
 }

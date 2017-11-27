@@ -10,10 +10,14 @@ import App from './App'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import moment from 'moment'
-import Autocomplete from 'vue2-autocomplete-js'
+import Autocomplete from 'v-autocomplete'
+
+import 'v-autocomplete/dist/v-autocomplete.css'
+
 
 Vue.config.productionTip = false
 
+Vue.use(Autocomplete)
 Vue.use(VueOnsen)
 Vue.use(VueAxios, axios)
 Vue.use(require('vue-moment'));
