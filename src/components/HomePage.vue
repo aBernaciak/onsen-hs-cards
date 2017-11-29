@@ -23,9 +23,10 @@
       <v-ons-list-item>
         <div class="center">
           <v-autocomplete :items="itemsSorted" :get-label="getLabel" :component-item='template' @update-items='update' v-model='item' @item-selected="itemSelected" keep-open="true" :input-attrs="{name: 'input-test', id: 'v-my-autocomplete'}">
+            <label for="">asd</label>
           </v-autocomplete>
-          <v-ons-input placeholder="Search for card by name" float v-model="name" @keyup.enter="search(name)">
-          </v-ons-input>
+   <!--        <v-ons-input placeholder="Search for card by name" float v-model="name" @keyup.enter="search(name)">
+          </v-ons-input> -->
         </div>
       </v-ons-list-item>
       <v-ons-list-item>
