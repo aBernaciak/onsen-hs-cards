@@ -22,6 +22,8 @@
       </v-ons-list-header>
       <v-ons-list-item>
         <div class="center">
+          <v-autocomplete :items="itemsSorted" :get-label="getLabel" :component-item='template' @update-items='update' v-model='item' @item-selected="itemSelected" keep-open="true" :input-attrs="{name: 'input-test', id: 'v-my-autocomplete'}">
+          </v-autocomplete>
           <v-ons-input placeholder="Search for card by name" float v-model="name" @keyup.enter="search(name)">
           </v-ons-input>
         </div>
@@ -37,13 +39,13 @@
         </div>
       </v-ons-list-item>
       <v-ons-list-item v-if="ifCardChosen">
-        {{cardChosen[0].name}} art by {{cardChosen[0].artist}}
+        <p v-if="cardChosen[0].artist">{{cardChosen[0].name}} art by {{cardChosen[0].artist}}</p>
         <pre>{{cardChosen[0].flavor}}</pre>
         <br>
         <div class="card-extra-info">
           <v-ons-icon style="color: green;" icon="fa-check" v-if="cardChosen[0].collectible"></v-ons-icon>
           <v-ons-icon style="color: red;" icon="fa-times" v-else></v-ons-icon>
-          Collectable
+          Not collectable
           <br>
           <v-ons-icon style="color: green;" icon="fa-unlock" v-if="cardChosen[0].howToEarn"></v-ons-icon>
           {{cardChosen[0].howToEarn}}
@@ -51,16 +53,6 @@
           <v-ons-icon style="color: gold;" icon="fa-unlock" v-if="cardChosen[0].howToEarnGolden"></v-ons-icon>
           {{cardChosen[0].howToEarnGolden}}
         </div>
-      </v-ons-list-item>
-      <v-ons-list-item>
-        <v-autocomplete :items="itemsSorted" :get-label="getLabel" :component-item='template' @update-items='update' v-model='item' keep-open="true" :inputAttrs="{}">
-        </v-autocomplete>
-      </v-ons-list-item>
-      <v-ons-list-item>
-        asd
-      </v-ons-list-item>
-      <v-ons-list-item>
-        asdas
       </v-ons-list-item>
     </v-ons-list>
 
@@ -82,7 +74,7 @@ export default {
   name: 'home',
   data () {
     return {
-      item: {id: 9, name: 'Lion', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'},
+      item: {name: 'Fireball', flavor: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'},
       itemsSorted: [],
       template: ItemTemplate,
       actionSheetVisible: false,
@@ -95,15 +87,19 @@ export default {
     }
   },
   methods: {
+    itemSelected (item) {
+      this.search(item.name)
+    },
     update (text) {
-      console.log(text)
       var itamz = this.cardArray;
       this.itemsSorted = itamz.filter((item) => {
-        console.log(this.toTitleCase(item.name))
-        return (new RegExp(this.toTitleCase(text))).test(this.toTitleCase(item.name))
+        if(item.name != undefined) {
+          return (new RegExp(text.toLowerCase())).test(item.name.toLowerCase())
+        }
+        // return (new RegExp(this.toTitleCase(text))).test(this.toTitleCase(item.name))
       })
     },
-     getLabel (item) {
+    getLabel (item) {
       return item.name
     },
     toTitleCase(str) {
@@ -143,10 +139,14 @@ export default {
       .catch(e => {
         console.log(e)
       })
+    },
+    onOffline() {
+      alert('asd')
     }
   },
   created() {
     this.getCardByLang();
+    document.addEventListener("offline", this.onOffline, false);
   }
 }
 </script>

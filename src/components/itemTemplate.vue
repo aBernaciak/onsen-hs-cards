@@ -1,6 +1,5 @@
 <template>
   <div>
-    <b>#{{item.id}}</b>
     <span>{{ item.name }}</span>
   </div>
 </template>
