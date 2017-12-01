@@ -112,15 +112,17 @@ export default {
       return item.name
     },
     toTitleCase(str) {
-      return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+      return str.replace(/\w\S*/g, function(txt) {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+      });
     },
     search(name) {
       this.ifCardChosen = false;
-      name = this.toTitleCase(name);
+      name = this.toTitleCase(name).replace(/[^a-zA-Z ]/g, "");
       var array = this.cardArray;
       if (name != '') {
         this.cardChosen = array.filter(function (el) {
-          if (el.name == name) {
+          if (el.name.replace(/[^a-zA-Z ]/g, "") == name) {
             return el.name == name;
           }
         });
@@ -146,7 +148,7 @@ export default {
         this.cardArray = response.data;
       })
       .catch(e => {
-        console.log(e)
+        this.$ons.notification.toast(`Something went wrong: ${e}`);
       })
     },
     onOffline() {
