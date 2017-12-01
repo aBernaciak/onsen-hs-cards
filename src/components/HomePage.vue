@@ -22,11 +22,10 @@
       </v-ons-list-header>
       <v-ons-list-item>
         <div class="center">
-          <v-autocomplete :items="itemsSorted" :get-label="getLabel" :component-item='template' @update-items='update' v-model='item' @item-selected="itemSelected" keep-open="true" :input-attrs="{name: 'input-test', id: 'v-my-autocomplete'}">
-            <label for="">asd</label>
+          <ons-search-input placeholder="Search something" modifier="material">
+          <v-autocomplete :items="itemsSorted" :get-label="getLabel" :component-item='template' @update-items='update' v-model='item' @item-selected="itemSelected" :keep-open="true" :input-attrs="{name: 'input-test', id: 'v-my-autocomplete', 'class': 'search-input search-input--material'}">
           </v-autocomplete>
-   <!--        <v-ons-input placeholder="Search for card by name" float v-model="name" @keyup.enter="search(name)">
-          </v-ons-input> -->
+          </ons-search-input>
         </div>
       </v-ons-list-item>
       <v-ons-list-item>
@@ -35,7 +34,7 @@
       <v-ons-list-item>
         <div class="card-container" :class="{flipped : ifCardChosen}">
           <img src="../assets/cardback_0.png" alt="" class="card-initial">
-          <img :src="cardChosen[0].src" alt="" class="card-flipped" v-if="ifCardChosen">
+          <img :src="cardChosen[0].src" @error="imageLoadError" alt="" class="card-flipped" v-if="ifCardChosen">
           <img src="../assets/cardback_0.png" class="card-flipped "alt="" v-else>
         </div>
       </v-ons-list-item>
@@ -44,15 +43,20 @@
         <pre>{{cardChosen[0].flavor}}</pre>
         <br>
         <div class="card-extra-info">
+          Collectable ?
           <v-ons-icon style="color: green;" icon="fa-check" v-if="cardChosen[0].collectible"></v-ons-icon>
           <v-ons-icon style="color: red;" icon="fa-times" v-else></v-ons-icon>
-          Not collectable
           <br>
-          <v-ons-icon style="color: green;" icon="fa-unlock" v-if="cardChosen[0].howToEarn"></v-ons-icon>
           {{cardChosen[0].howToEarn}}
+          <v-ons-icon style="color: green;" icon="fa-unlock" v-if="cardChosen[0].howToEarn"></v-ons-icon>
           <br>
-          <v-ons-icon style="color: gold;" icon="fa-unlock" v-if="cardChosen[0].howToEarnGolden"></v-ons-icon>
           {{cardChosen[0].howToEarnGolden}}
+          <v-ons-icon style="color: gold;" icon="fa-unlock" v-if="cardChosen[0].howToEarnGolden"></v-ons-icon>
+        </div>
+      </v-ons-list-item>
+      <v-ons-list-item v-if="ifCardChosen">
+        <div v-if="cardChosen[0].set">
+          From set: {{ cardChosen[0].set | extendedSet }}
         </div>
       </v-ons-list-item>
     </v-ons-list>
@@ -75,7 +79,7 @@ export default {
   name: 'home',
   data () {
     return {
-      item: {name: 'Fireball', flavor: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'},
+      item: {name: '', flavor: ''},
       itemsSorted: [],
       template: ItemTemplate,
       actionSheetVisible: false,
@@ -88,8 +92,13 @@ export default {
     }
   },
   methods: {
+    imageLoadError() {
+      this.$ons.notification.toast('This card doesn\'t have an art.', {timeout: 2000});
+    },
     itemSelected (item) {
-      this.search(item.name)
+      this.ifCardChosen = false;
+      console.log(item)
+      this.search(item.name);
     },
     update (text) {
       var itamz = this.cardArray;
@@ -97,7 +106,6 @@ export default {
         if(item.name != undefined) {
           return (new RegExp(text.toLowerCase())).test(item.name.toLowerCase())
         }
-        // return (new RegExp(this.toTitleCase(text))).test(this.toTitleCase(item.name))
       })
     },
     getLabel (item) {
@@ -145,6 +153,31 @@ export default {
       alert('asd')
     }
   },
+  filters: {
+    extendedSet(value) {
+      if (!value) return ''
+      switch(value) {
+        case 'TGT': 
+          return 'The Grand Tournament';
+        case 'LOE':
+          return 'The League of Explorers';
+        case 'ICECROWN':
+          return 'Knights of the Frozen Throne';
+        case 'KARA':
+          return 'One night in Karazhan';
+        case 'BRM':
+          return 'Blackrock Mountain';
+        case 'GANGS':
+          return 'Mean streets of Gadgetzan';
+        case 'UNGORO':
+          return 'Journey to UN\'GORO';
+        case 'OG':
+          return 'Whispers of the Old Gods'
+        default: 
+          return value;
+      }
+    }
+  },
   created() {
     this.getCardByLang();
     document.addEventListener("offline", this.onOffline, false);
@@ -187,6 +220,7 @@ export default {
     }
   }
 }
+
 .hs-logo {
   max-width: 300px;
   margin: 0 auto;

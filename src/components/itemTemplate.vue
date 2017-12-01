@@ -1,7 +1,8 @@
 <template>
   <div>
-    <strong>{{ item.name }}</strong>
-  	<p>{{ item.text | toOneLine }}</p>
+    <strong>{{ item.name }} <small>{{item.type | toLowerCase}}</small></strong>
+    <br>
+  	<abbr v-html="$options.filters.toOneLine(item.text)"></abbr>
   </div>
 </template>
 
@@ -14,8 +15,27 @@ export default {
   filters: {
   	toOneLine(value) {
   		if (!value) return ''
-			return value.substring(0, 20) + '...';
-  	}
+      if (value.length >= 60) {
+			 return value.substring(0, 40) + '...';
+      }
+      else {
+        return value;
+      }
+  	},
+    toLowerCase(value) {
+      if (!value) return ''
+      var text = value.toLowerCase().split('_');
+      for (let i=0; i<text.length; i++) {
+        text[i] = text[i].charAt(0).toUpperCase() + text[i].slice(1);
+      }
+      return text.join(' ');
+    }
   }
 }
 </script>
+
+<style scoped>
+  abbr {
+    font-size: 13px;
+  }
+</style>
