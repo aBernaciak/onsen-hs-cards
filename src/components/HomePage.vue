@@ -23,7 +23,14 @@
       <v-ons-list-item>
         <div class="center">
           <ons-search-input placeholder="Search something" modifier="material">
-          <v-autocomplete :items="itemsSorted" :get-label="getLabel" :component-item='template' @update-items='update' v-model='item' @item-selected="itemSelected" :keep-open="true" :input-attrs="{name: 'input-test', id: 'v-my-autocomplete', 'class': 'search-input search-input--material'}">
+          <v-autocomplete :items="itemsSorted"
+                          :get-label="getLabel"
+                          :component-item='template'
+                          @update-items='update'
+                          v-model='item'
+                          @item-selected="itemSelected"
+                          :keep-open="true"
+                          :input-attrs="{name: 'input-test', id: 'v-my-autocomplete', 'class': 'search-input search-input--material'}">
           </v-autocomplete>
           </ons-search-input>
         </div>
@@ -34,7 +41,12 @@
       <v-ons-list-item>
         <div class="card-container" :class="{flipped : ifCardChosen}">
           <img src="../assets/cardback_0.png" alt="" class="card-initial">
-          <img :src="cardChosen[0].src" @error="imageLoadError" alt="" class="card-flipped" v-if="ifCardChosen">
+
+          <img :src="cardChosen[0].src"
+               @error="imageLoadError"
+               class="card-flipped"
+               v-if="ifCardChosen">
+
           <img src="../assets/cardback_0.png" class="card-flipped "alt="" v-else>
         </div>
       </v-ons-list-item>
@@ -97,7 +109,6 @@ export default {
     },
     itemSelected (item) {
       this.ifCardChosen = false;
-      console.log(item)
       this.search(item.name);
     },
     update (text) {
@@ -109,20 +120,15 @@ export default {
       })
     },
     getLabel (item) {
-      return item.name
-    },
-    toTitleCase(str) {
-      return str.replace(/\w\S*/g, function(txt) {
-        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-      });
+      return item.name;
     },
     search(name) {
       this.ifCardChosen = false;
-      name = this.toTitleCase(name).replace(/[^a-zA-Z ]/g, "");
       var array = this.cardArray;
       if (name != '') {
         this.cardChosen = array.filter(function (el) {
-          if (el.name.replace(/[^a-zA-Z ]/g, "") == name) {
+          console.log(el.name, name)
+          if (el.name == name) {
             return el.name == name;
           }
         });
@@ -130,12 +136,10 @@ export default {
           this.$ons.notification.toast('We couldn\'t find that card.', {timeout: 2000});
         }
         else {
-          this.cardChosen[0].src = `https://art.hearthstonejson.com/v1/render/latest/${this.langChosen}/256x/${this.cardChosen[0].id}.png`;
+          this.cardChosen[0].src = `
+            https://art.hearthstonejson.com/v1/render/latest/${this.langChosen}/256x/${this.cardChosen[0].id}.png`;
           this.ifCardChosen = true;
         }
-      }
-      else {
-        this.$ons.notification.toast('Input cannot be empty.', {timeout: 2000});
       }
       console.log(this.cardChosen[0])
     },
@@ -159,7 +163,7 @@ export default {
     extendedSet(value) {
       if (!value) return ''
       switch(value) {
-        case 'TGT': 
+        case 'TGT':
           return 'The Grand Tournament';
         case 'LOE':
           return 'The League of Explorers';
@@ -175,7 +179,7 @@ export default {
           return 'Journey to UN\'GORO';
         case 'OG':
           return 'Whispers of the Old Gods'
-        default: 
+        default:
           return value;
       }
     }
