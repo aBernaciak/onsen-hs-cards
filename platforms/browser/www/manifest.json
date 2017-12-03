@@ -1,11 +1,17 @@
 {
   "background_color": "#FFF",
   "display": "standalone",
-  "name": "First app",
-  "short_name": "First app",
-  "version": "io.cordova.helloworld",
+  "name": "Hearthstone Card Checker",
+  "short_name": "Hearthstone Card Checker",
+  "version": "io.cordova.hschecker",
   "description": "App by Aleksy Bernaciak",
   "author": "Aleksy Bernaciak",
-  "icons": [],
+  "icons": [
+    {
+      "src": "res/icon.png",
+      "type": "image/png",
+      "sizes": "undefinedxundefined"
+    }
+  ],
   "start_url": "index.html"
 }

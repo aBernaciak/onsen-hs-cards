@@ -22,21 +22,16 @@
       </v-ons-list-header>
       <v-ons-list-item>
         <div class="center">
-          <ons-search-input placeholder="Search something" modifier="material">
           <v-autocomplete :items="itemsSorted"
                           :get-label="getLabel"
                           :component-item='template'
-                          @update-items='update'
                           v-model='item'
+                          :auto-select-one-item="false"
                           @item-selected="itemSelected"
-                          :keep-open="true"
+                          @update-items='update'
                           :input-attrs="{name: 'input-test', id: 'v-my-autocomplete', 'class': 'search-input search-input--material'}">
           </v-autocomplete>
-          </ons-search-input>
         </div>
-      </v-ons-list-item>
-      <v-ons-list-item>
-        <v-ons-button modifier="large" @click="search(name)">Search</v-ons-button>
       </v-ons-list-item>
       <v-ons-list-item>
         <div class="card-container" :class="{flipped : ifCardChosen}">
@@ -51,7 +46,6 @@
         </div>
       </v-ons-list-item>
       <v-ons-list-item v-if="ifCardChosen">
-        <p v-if="cardChosen[0].artist">{{cardChosen[0].name}} art by {{cardChosen[0].artist}}</p>
         <pre>{{cardChosen[0].flavor}}</pre>
         <br>
         <div class="card-extra-info">
@@ -69,6 +63,9 @@
       <v-ons-list-item v-if="ifCardChosen">
         <div v-if="cardChosen[0].set">
           From set: {{ cardChosen[0].set | extendedSet }}
+        </div>
+        <div v-if="cardChosen[0].artist">
+          {{cardChosen[0].name}} art by {{cardChosen[0].artist}}
         </div>
       </v-ons-list-item>
     </v-ons-list>
@@ -91,7 +88,7 @@ export default {
   name: 'home',
   data () {
     return {
-      item: {name: '', flavor: ''},
+      item: '',
       itemsSorted: [],
       template: ItemTemplate,
       actionSheetVisible: false,
@@ -105,7 +102,7 @@ export default {
   },
   methods: {
     imageLoadError() {
-      this.$ons.notification.toast('This card doesn\'t have an art.', {timeout: 2000});
+      this.$ons.notification.toast('This card doesn\'t have an art or there is no Internet Connection.', {timeout: 2000});
     },
     itemSelected (item) {
       this.ifCardChosen = false;
@@ -120,14 +117,21 @@ export default {
       })
     },
     getLabel (item) {
-      return item.name;
+      let inputId = document.getElementById('v-my-autocomplete');
+      if (inputId.value == '') {
+        return item.name;
+      }
+      else {
+        inputId.value = '';
+        this.item = '';
+        return '';
+      }
     },
     search(name) {
       this.ifCardChosen = false;
       var array = this.cardArray;
       if (name != '') {
         this.cardChosen = array.filter(function (el) {
-          console.log(el.name, name)
           if (el.name == name) {
             return el.name == name;
           }
@@ -185,7 +189,9 @@ export default {
     }
   },
   created() {
-    this.getCardByLang();
+    if(this.cardArray.length == 0) {
+      this.getCardByLang();
+    }
     document.addEventListener("offline", this.onOffline, false);
   }
 }

@@ -42,10 +42,11 @@ export default {
 ons-splitter-side[side=left][animation=overlay] {
   border-right: 1px solid #BBB;
 }
-ons-search-input {
-  width: 100%;
-}
 .v-autocomplete {
+  width: 100%;
+  input {
+    width: 100%;
+  }
   .v-autocomplete-list {
     z-index: 15;
     background: #fff;
