@@ -1,8 +1,9 @@
 <template>
   <div>
-    <strong>{{ item.name }} <small>{{item.type | toLowerCase}}</small></strong>
+    <strong>{{ item.name }} <small class="pull-right">{{item.type | toLowerCase}}</small></strong>
     <br>
-  	<abbr v-html="$options.filters.toOneLine(item.text)"></abbr>
+  	<!-- <abbr v-html="$options.filters.toOneLine(item.text)"></abbr> -->
+    <abbr v-html="item.text"></abbr>
   </div>
 </template>
 
@@ -13,15 +14,6 @@ export default {
     searchText: { required: true }
   },
   filters: {
-  	toOneLine(value) {
-  		if (!value) return ''
-      if (value.length >= 60) {
-			 return value.substring(0, 40) + '...';
-      }
-      else {
-        return value;
-      }
-  	},
     toLowerCase(value) {
       if (!value) return ''
       var text = value.toLowerCase().split('_');
@@ -35,7 +27,16 @@ export default {
 </script>
 
 <style scoped>
-  abbr {
-    font-size: 13px;
-  }
+small {
+  font-weight: 300;
+  font-size: 11px;
+}
+abbr {
+  display: block;
+  font-size: 13px;
+  white-space: nowrap; 
+  width: 290px; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+}
 </style>

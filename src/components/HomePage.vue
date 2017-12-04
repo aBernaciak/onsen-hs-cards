@@ -34,39 +34,17 @@
         </div>
       </v-ons-list-item>
       <v-ons-list-item>
-        <div class="card-container" :class="{flipped : ifCardChosen}">
-          <img src="../assets/cardback_0.png" alt="" class="card-initial">
 
-          <img :src="cardChosen[0].src"
-               @error="imageLoadError"
-               class="card-flipped"
-               v-if="ifCardChosen">
+        <CardImage v-bind:ifChosenPassed="ifCardChosen"
+                   v-bind:imgSrcPassed="imgChosen">
+        </CardImage>
 
-          <img src="../assets/cardback_0.png" class="card-flipped "alt="" v-else>
-        </div>
       </v-ons-list-item>
       <v-ons-list-item v-if="ifCardChosen">
-        <pre>{{cardChosen[0].flavor}}</pre>
-        <br>
-        <div class="card-extra-info">
-          Collectable ?
-          <v-ons-icon style="color: green;" icon="fa-check" v-if="cardChosen[0].collectible"></v-ons-icon>
-          <v-ons-icon style="color: red;" icon="fa-times" v-else></v-ons-icon>
-          <br>
-          {{cardChosen[0].howToEarn}}
-          <v-ons-icon style="color: green;" icon="fa-unlock" v-if="cardChosen[0].howToEarn"></v-ons-icon>
-          <br>
-          {{cardChosen[0].howToEarnGolden}}
-          <v-ons-icon style="color: gold;" icon="fa-unlock" v-if="cardChosen[0].howToEarnGolden"></v-ons-icon>
-        </div>
-      </v-ons-list-item>
-      <v-ons-list-item v-if="ifCardChosen">
-        <div v-if="cardChosen[0].set">
-          From set: {{ cardChosen[0].set | extendedSet }}
-        </div>
-        <div v-if="cardChosen[0].artist">
-          {{cardChosen[0].name}} art by {{cardChosen[0].artist}}
-        </div>
+
+        <CardDesc v-bind:cardPassed="cardChosenComputed">
+        </CardDesc>
+
       </v-ons-list-item>
     </v-ons-list>
 
@@ -83,16 +61,19 @@
 
 <script>
 import ItemTemplate from './ItemTemplate.vue'
+import CardImage from './CardImage.vue'
+import CardDesc from './CardDesc.vue'
 
 export default {
   name: 'home',
+  components: {CardImage, CardDesc},
   data () {
     return {
       item: '',
       itemsSorted: [],
       template: ItemTemplate,
       actionSheetVisible: false,
-      cardArray: [],
+      cardArray: this.$store.state.cardsArray,
       langArray: ['enUS', 'plPL', 'DeDE'],
       langChosen: 'enUS',
       cardChosen: {},
@@ -101,9 +82,6 @@ export default {
     }
   },
   methods: {
-    imageLoadError() {
-      this.$ons.notification.toast('This card doesn\'t have an art or there is no Internet Connection.', {timeout: 2000});
-    },
     itemSelected (item) {
       this.ifCardChosen = false;
       this.search(item.name);
@@ -140,58 +118,43 @@ export default {
           this.$ons.notification.toast('We couldn\'t find that card.', {timeout: 2000});
         }
         else {
-          this.cardChosen[0].src = `
-            https://art.hearthstonejson.com/v1/render/latest/${this.langChosen}/256x/${this.cardChosen[0].id}.png`;
+          this.cardChosenComputed.src = `
+            https://art.hearthstonejson.com/v1/render/latest/${this.langChosen}/256x/${this.cardChosenComputed.id}.png`;
           this.ifCardChosen = true;
         }
       }
-      console.log(this.cardChosen[0])
+      console.log(this.cardChosenComputed)
     },
     changeLanguage(lang) {
       this.langChosen = lang;
     },
     getCardByLang(){
-      this.axios.get(`https://api.hearthstonejson.com/v1/latest/${this.langChosen}/cards.json`)
-      .then(response => {
-        this.cardArray = response.data;
-      })
-      .catch(e => {
-        this.$ons.notification.toast(`Something went wrong: ${e}`);
-      })
+      // this.axios.get(`https://api.hearthstonejson.com/v1/latest/${this.langChosen}/cards.json`)
+      // .then(response => {
+      //   this.cardArray = response.data;
+      // })
+      // .catch(e => {
+      //   this.$ons.notification.toast(`Something went wrong: ${e}`);
+      // })
+      // this.$store.commit('updateCards', ['asd','fasf','asds']);
     },
     onOffline() {
-      alert('asd')
+      alert('Seems like there is no Internet Connection. There might by problems with loading images.');
     }
   },
-  filters: {
-    extendedSet(value) {
-      if (!value) return ''
-      switch(value) {
-        case 'TGT':
-          return 'The Grand Tournament';
-        case 'LOE':
-          return 'The League of Explorers';
-        case 'ICECROWN':
-          return 'Knights of the Frozen Throne';
-        case 'KARA':
-          return 'One night in Karazhan';
-        case 'BRM':
-          return 'Blackrock Mountain';
-        case 'GANGS':
-          return 'Mean streets of Gadgetzan';
-        case 'UNGORO':
-          return 'Journey to UN\'GORO';
-        case 'OG':
-          return 'Whispers of the Old Gods'
-        default:
-          return value;
+  computed: {
+    cardChosenComputed() {
+      if(typeof this.cardChosen[0] !== 'undefined') {
+        return this.cardChosen[0];
+      }
+    },
+    imgChosen() {
+      if(typeof this.cardChosen[0] !== 'undefined') {
+        return this.cardChosen[0].src;
       }
     }
   },
   created() {
-    if(this.cardArray.length == 0) {
-      this.getCardByLang();
-    }
     document.addEventListener("offline", this.onOffline, false);
   }
 }
@@ -203,43 +166,9 @@ export default {
   text-align: center;
 }
 
-.card-extra-info {
-  display: block;
-  width: 100%;
-}
-
-.card-container {
-  margin: 0 auto;
-  transform: rotateY(0);
-  transform-style: preserve-3d;
-  transition: all .6s linear;
-  width: 256px;
-  height: 382px;
-  position: relative;
-  margin: -30px auto -30px;
-  &.flipped {
-    transform: rotateY(180deg);
-  }
-  img {
-    &.card-initial {
-      position: absolute;
-      backface-visibility: hidden;
-    }
-    &.card-flipped {
-      transition: opacity 0.5s linear;
-      transform: rotateY(180deg);
-      transform: rotate3d(0, 1, 0, 180deg);
-    }
-  }
-}
-
 .hs-logo {
   max-width: 300px;
   margin: 0 auto;
-}
-
-pre {
-  white-space: normal;
 }
 
 ons-list-title:not(:first-of-type) {

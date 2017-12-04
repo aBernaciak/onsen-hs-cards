@@ -8,7 +8,7 @@
       </v-ons-splitter-side>
 
       <v-ons-splitter-content>
-        <home-page></home-page>
+        <HomePage></HomePage>
       </v-ons-splitter-content>
     </v-ons-splitter>
   </v-ons-page>
@@ -57,7 +57,6 @@ ons-splitter-side[side=left][animation=overlay] {
     box-shadow: 0 0 2px 0 rgba(0, 0, 0, .12), 0 2px 2px 0 rgba(0, 0, 0, .24), 0 1px 0 0 rgba(255, 255, 255, .6) inset;
     .v-autocomplete-list-item {
       overflow: hidden;
-      width: 100%;
       cursor: pointer;
       padding: 10px;
       background: #fff;
