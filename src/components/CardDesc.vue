@@ -32,9 +32,11 @@ export default {
   methods: {
   },
   filters: {
-    extendedSet(value) {
-      if (!value) return ''
-      switch(value) {
+    extendedSet(setName) {
+      if (!setName) return ''
+      switch(setName) {
+        case 'GVG':
+          return 'Goblins vs Gnomes';
         case 'TGT':
           return 'The Grand Tournament';
         case 'LOE':
@@ -52,7 +54,7 @@ export default {
         case 'OG':
           return 'Whispers of the Old Gods'
         default:
-          return value;
+          return setName;
       }
     }
   },
@@ -68,7 +70,7 @@ pre {
   width: 100%;
   .card-extra {
     &:not(:last-child) {
-      margin-bottom: 20px;     
+      margin-bottom: 20px;
     }
   }
 }
