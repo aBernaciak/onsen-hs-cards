@@ -139,7 +139,9 @@ export default {
       // this.$store.commit('updateCards', ['asd','fasf','asds']);
     },
     onOffline() {
-      alert('Seems like there is no Internet Connection. There might by problems with loading images.');
+      this.$ons.notification.alert(`
+        Seems like there is no Internet Connection. There might by problems with loading images.
+      `);
     }
   },
   computed: {
