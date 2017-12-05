@@ -1,34 +1,72 @@
 <template>
   <div class="card-extra-info">
-    <div class="card-extra">
-      <pre>{{cardPassed.flavor}}</pre>
-    </div>
-    <div class="card-extra">
-      Collectable ?
-      <v-ons-icon style="color: green;" icon="fa-check" v-if="cardPassed.collectible"></v-ons-icon>
-      <v-ons-icon style="color: red;" icon="fa-times" v-else></v-ons-icon>
-    </div>
-    <div class="card-extra">
-      {{cardPassed.howToEarn}}
-      <v-ons-icon style="color: green;" icon="fa-unlock" v-if="cardPassed.howToEarn"></v-ons-icon>
-      <br>
-      {{cardPassed.howToEarnGolden}}
-      <v-ons-icon style="color: gold;" icon="fa-unlock" v-if="cardPassed.howToEarnGolden"></v-ons-icon>
-    </div>
-    <div class="card-extra">
-      <div v-if="cardPassed.set">
-        From set: {{ cardPassed.set | extendedSet }}
-      </div>
-      <div v-if="cardPassed.artist">
-        {{cardPassed.name}} art by {{cardPassed.artist}}
-      </div>
-    </div>
+    <v-ons-list>
+      <v-ons-list-header>
+        Card Description
+      </v-ons-list-header>
+      <v-ons-list-item>
+        <pre v-if="cardPassed.flavor">{{cardPassed.flavor}}</pre>
+        <p v-else>Card description is not available.</p>
+      </v-ons-list-item>
+    </v-ons-list>
+
+    <v-ons-list>
+      <v-ons-list-header>
+        Collectable
+      </v-ons-list-header>
+      <v-ons-list-item>
+        <p v-if="cardPassed.collectible"><strong>Yes</strong></p>
+        <p v-else><strong>No</strong></p>
+      </v-ons-list-item>
+    </v-ons-list>
+
+    <v-ons-list>
+      <v-ons-list-header>
+        How to earn Card
+      </v-ons-list-header>
+      <v-ons-list-item>
+        <p v-if="cardPassed.howToEarn"><strong>Normal</strong>: {{cardPassed.howToEarn}}</p>
+        <p v-else>How to earn card is not available.</p>
+
+        <p v-if="cardPassed.howToEarnGolden"><strong>Golden Card</strong>: {{cardPassed.howToEarnGolden}}</p>
+        <p v-else>How to earn golden card is not available.</p>
+      </v-ons-list-item>
+    </v-ons-list>
+
+    <v-ons-list>
+      <v-ons-list-header>
+        Card Set
+      </v-ons-list-header>
+      <v-ons-list-item>
+        <p v-if="cardPassed.set">
+          <strong>From set</strong>: {{ cardPassed.set | extendedSet }}
+        </p>
+        <p v-else>Card set is not available.</p>
+      </v-ons-list-item>
+    </v-ons-list>
+
+    <v-ons-list>
+      <v-ons-list-header>
+        Card Artist
+      </v-ons-list-header>
+      <v-ons-list-item>
+        <p v-if="cardPassed.artist">
+          <strong>Card art</strong> by {{cardPassed.artist}}
+        </p>
+        <p v-else><strong>Card artist</strong> is not available.</p>
+      </v-ons-list-item>
+    </v-ons-list>
+
   </div>
 </template>
 
 <script>
 export default {
   props: ['cardPassed'],
+  data () {
+    return {
+    }
+  },
   methods: {
   },
   filters: {
@@ -68,10 +106,5 @@ pre {
 .card-extra-info {
   display: block;
   width: 100%;
-  .card-extra {
-    &:not(:last-child) {
-      margin-bottom: 20px;
-    }
-  }
 }
 </style>

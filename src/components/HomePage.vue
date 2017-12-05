@@ -22,10 +22,10 @@
       </v-ons-list-header>
       <v-ons-list-item>
         <div class="center">
-          <v-autocomplete :items="itemsSorted"
+          <v-autocomplete v-model='item'
+                          :items="itemsSorted"
                           :get-label="getLabel"
                           :component-item='template'
-                          v-model='item'
                           :auto-select-one-item="false"
                           @item-selected="itemSelected"
                           @update-items='update'
@@ -42,12 +42,10 @@
         </CardImage>
 
       </v-ons-list-item>
-      <v-ons-list-item v-if="ifCardChosen">
 
-        <CardDesc v-bind:cardPassed="cardChosenComputed">
-        </CardDesc>
+      <CardDesc  v-if="ifCardChosen" v-bind:cardPassed="cardChosenComputed">
+      </CardDesc>
 
-      </v-ons-list-item>
     </v-ons-list>
 
     <v-ons-action-sheet :visible.sync="actionSheetVisible" cancelable title="Change language">
@@ -95,6 +93,7 @@ export default {
           return (new RegExp(text.toLowerCase())).test(item.name.toLowerCase())
         }
       })
+      console.log(this.itemsSorted)
     },
     getLabel (item) {
       let inputId = document.getElementById('v-my-autocomplete');
