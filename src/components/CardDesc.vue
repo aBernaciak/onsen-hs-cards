@@ -24,7 +24,13 @@
       <v-ons-list-header>
         How to earn Card
       </v-ons-list-header>
-      <v-ons-list-item>
+      <v-ons-list-item v-if="cardPassed.rarity && !(cardPassed.howToEarn)">
+        <div>
+          Crafting cost of normal card: <strong>{{cardPassed.rarity | extendedRarity}}</strong><br><br>
+          Crafting cost of golden card: <strong>{{cardPassed.rarity | extendedRarity(true)}}</strong>
+        </div>
+      </v-ons-list-item>
+      <v-ons-list-item v-else>
         <p v-if="cardPassed.howToEarn"><strong>Normal</strong>: {{cardPassed.howToEarn}}</p>
         <p v-else>How to earn card is not available.</p>
 
@@ -70,6 +76,20 @@ export default {
   methods: {
   },
   filters: {
+    extendedRarity(rarity, ifGolden) {
+      switch(rarity) {
+        case 'COMMON':
+          return ifGolden ? 400 : 40;
+        case 'RARE':
+          return ifGolden ? 100 : 800; 
+        case 'EPIC':
+          return ifGolden ? 400 : 1600;
+        case 'LEGENDARY':
+          return ifGolden ? 1600 : 3200;
+        default:
+          return rarity;
+      }
+    },
     extendedSet(setName) {
       if (!setName) return ''
       switch(setName) {
@@ -90,7 +110,9 @@ export default {
         case 'UNGORO':
           return 'Journey to UN\'GORO';
         case 'OG':
-          return 'Whispers of the Old Gods'
+          return 'Whispers of the Old Gods';
+        case 'HOF':
+          return 'Halls of Fame - no longer playable in standard mode.';
         default:
           return setName;
       }

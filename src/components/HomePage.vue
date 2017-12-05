@@ -93,7 +93,7 @@ export default {
           return (new RegExp(text.toLowerCase())).test(item.name.toLowerCase())
         }
       })
-      console.log(this.itemsSorted)
+      this.$forceUpdate();
     },
     getLabel (item) {
       let inputId = document.getElementById('v-my-autocomplete');
