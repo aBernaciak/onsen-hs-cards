@@ -81,11 +81,11 @@ export default {
         case 'COMMON':
           return ifGolden ? 400 : 40;
         case 'RARE':
-          return ifGolden ? 100 : 800; 
+          return ifGolden ? 800 : 100; 
         case 'EPIC':
-          return ifGolden ? 400 : 1600;
+          return ifGolden ? 1600 : 400;
         case 'LEGENDARY':
-          return ifGolden ? 1600 : 3200;
+          return ifGolden ? 3200 : 1600;
         default:
           return rarity;
       }
@@ -118,6 +118,9 @@ export default {
       }
     }
   },
+  created () {
+    console.log(this.cardPassed)
+  }
 }
 </script>
 
