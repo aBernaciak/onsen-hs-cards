@@ -14,7 +14,7 @@
     </v-ons-toolbar>
 
     <div class="header">
-      <img src="https://eu.battle.net/forums/static/images/game-logos/game-logo-hearthstone.png" class="hs-logo">
+      <img src="https://eu.battle.net/forums/static/images/game-logos/game-logo-hearthstone.png" class="hs-logo" @click="itemsSorted = []">
     </div>
     <v-ons-list>
       <v-ons-list-header>
@@ -45,7 +45,7 @@
 
       </v-ons-list-item>
 
-      <CardDesc  v-if="ifCardChosen" v-bind:cardPassed="cardChosenComputed">
+      <CardDesc v-if="ifCardChosen" v-bind:cardPassed="cardChosenComputed">
       </CardDesc>
 
     </v-ons-list>
@@ -107,13 +107,16 @@ export default {
         return item.name;
       }
       else {
+        this.itemsSorted = [];
         inputId.value = '';
         this.item = '';
         return '';
       }
+      this.itemsSorted = [];
     },
     search(name) {
       this.ifCardChosen = false;
+      this.cardChosen = {};
       var array = this.cardArray;
       if (name != '') {
         this.cardChosen = array.filter(function (el) {
@@ -130,7 +133,7 @@ export default {
           this.ifCardChosen = true;
         }
       }
-      console.log(this.cardChosenComputed)
+      // console.log(this.cardChosenComputed)
     },
     changeLanguage(lang) {
       this.langChosen = lang;
