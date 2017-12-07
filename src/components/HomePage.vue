@@ -24,6 +24,8 @@
         <div class="center">
           <v-autocomplete v-model='item'
                           :items="itemsSorted"
+                          :min-len='0'
+                          :wait='1000'
                           :get-label="getLabel"
                           :component-item='template'
                           :auto-select-one-item="false"
@@ -88,12 +90,16 @@ export default {
     },
     update (text) {
       var itamz = this.cardArray;
-      this.itemsSorted = itamz.filter((item) => {
-        if(item.name != undefined) {
-          return (new RegExp(text.toLowerCase())).test(item.name.toLowerCase())
-        }
-      })
-      this.$forceUpdate();
+      if(text.length >= 3) {
+        this.itemsSorted = itamz.filter((item) => {
+          if(item.name != undefined) {
+            return (new RegExp(text.toLowerCase())).test(item.name.toLowerCase())
+          }
+        })
+      }
+      else if (text.length == 0) {
+        this.itemsSorted = [];
+      }
     },
     getLabel (item) {
       let inputId = document.getElementById('v-my-autocomplete');

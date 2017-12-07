@@ -1,9 +1,9 @@
 <template>
   <div>
-    <strong>{{ item.name }} 
+    <strong>{{ item.name }}
       <small class="pull-right">
-        <span :class="{priest : itemClass == 'PRIEST'}"
-              :style="{color: classColors[0][itemClass]}">
+        <span :class="{priest : item.playerClass == 'PRIEST'}"
+              :style="{color: classColors[0][item.playerClass]}">
 
           {{item.playerClass | toLowerCase}}
         </span> - {{item.type | toLowerCase}}
@@ -35,7 +35,7 @@ export default {
           WARRIOR: '#C79C6E'
         }
       ],
-      itemClass: this.item.playerClass
+      // itemClass: this.item.playerClass
     }
   },
   filters: {
@@ -50,7 +50,11 @@ export default {
   },
   created () {
     // var test = this.itemClass;
-    // console.log(this.classColors[0][test], test)
+    // console.log(this.item.playerClass)
+  },
+  destroyed() {
+    // console.log(this.item)
+    // this.$forceUpdate()
   }
 }
 </script>
@@ -70,9 +74,9 @@ small {
 abbr {
   display: block;
   font-size: 13px;
-  white-space: nowrap; 
-  width: 290px; 
+  white-space: nowrap;
+  width: 290px;
   overflow: hidden;
-  text-overflow: ellipsis; 
+  text-overflow: ellipsis;
 }
 </style>
