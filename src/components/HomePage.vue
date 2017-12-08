@@ -50,10 +50,8 @@
                 v-bind:cardPassed="cardChosenComputed">
       </CardDesc>
 
-      <v-ons-list-item>
-<!--         <div class="center" v-for="card in cards">
-          asd
-        </div> -->
+      <v-ons-list-item v-for="card in cards">
+        {{card.cardName}}
       </v-ons-list-item>
     </v-ons-list>
 
@@ -73,7 +71,7 @@ import ItemTemplate from './ItemTemplate.vue'
 import CardImage from './CardImage.vue'
 import CardDesc from './CardDesc.vue'
 
-import firebase from 'firebase'
+import { db } from '../store/firebase.js';
 
 export default {
   name: 'home',
@@ -90,11 +88,11 @@ export default {
       cardChosen: {},
       ifCardChosen: false,
       name: '',
-      cardsViewed: this.$store.state.cardsViewed
+      cardsViewed: db.ref('cards-viewed')
     }
   },
   firebase: {
-    cards: this.cardsViewed
+    cards: db.ref('cards-viewed')
   },
   methods: {
     clearInput() {
