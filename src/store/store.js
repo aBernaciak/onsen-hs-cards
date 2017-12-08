@@ -1,12 +1,17 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Cards from './cards.json'
+import { db } from './firebase.js';
+
+var VueFire = require('vuefire')
 
 Vue.use(Vuex)
+Vue.use(VueFire)
 
 export default new Vuex.Store({
   state: {
-    cardsArray: Cards
+    cardsArray: Cards,
+    cardsViewed: db.ref('cards-viewed')
   },
   mutations: {
     updateCards(state, newCards) {

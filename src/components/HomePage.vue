@@ -14,7 +14,7 @@
     </v-ons-toolbar>
 
     <div class="header">
-      <img src="https://eu.battle.net/forums/static/images/game-logos/game-logo-hearthstone.png" class="hs-logo" @click="itemsSorted = []">
+      <img src="https://eu.battle.net/forums/static/images/game-logos/game-logo-hearthstone.png" class="hs-logo">
     </div>
     <v-ons-list>
       <v-ons-list-header>
@@ -25,7 +25,7 @@
           <v-autocomplete v-model='item'
                           :items="itemsSorted"
                           :min-len='0'
-                          :wait='1000'
+                          :wait='400'
                           :get-label="getLabel"
                           :component-item='template'
                           :auto-select-one-item="false"
@@ -35,6 +35,7 @@
                                          id: 'v-my-autocomplete',
                                          'class': 'search-input search-input--material'}">
           </v-autocomplete>
+          <v-ons-icon class="clear-input" style="color: red;" icon="fa-times" @click="clearInput"></v-ons-icon>
         </div>
       </v-ons-list-item>
       <v-ons-list-item>
@@ -45,9 +46,15 @@
 
       </v-ons-list-item>
 
-      <CardDesc v-if="ifCardChosen" v-bind:cardPassed="cardChosenComputed">
+      <CardDesc v-bind:ifChosenPassed="ifCardChosen"
+                v-bind:cardPassed="cardChosenComputed">
       </CardDesc>
 
+      <v-ons-list-item>
+<!--         <div class="center" v-for="card in cards">
+          asd
+        </div> -->
+      </v-ons-list-item>
     </v-ons-list>
 
     <v-ons-action-sheet :visible.sync="actionSheetVisible" cancelable title="Change language">
@@ -66,6 +73,8 @@ import ItemTemplate from './ItemTemplate.vue'
 import CardImage from './CardImage.vue'
 import CardDesc from './CardDesc.vue'
 
+import firebase from 'firebase'
+
 export default {
   name: 'home',
   components: {CardImage, CardDesc},
@@ -81,9 +90,20 @@ export default {
       cardChosen: {},
       ifCardChosen: false,
       name: '',
+      cardsViewed: this.$store.state.cardsViewed
     }
   },
+  firebase: {
+    cards: this.cardsViewed
+  },
   methods: {
+    clearInput() {
+      let inputId = document.getElementById('v-my-autocomplete');
+      this.ifCardChosen = false;
+      this.itemsSorted = [];
+      inputId.value = '';
+      this.item = '';
+    },
     itemSelected (item) {
       this.ifCardChosen = false;
       this.search(item.name);
@@ -98,6 +118,7 @@ export default {
         })
       }
       else if (text.length == 0) {
+        this.ifCardChosen = false;
         this.itemsSorted = [];
       }
     },
@@ -133,7 +154,6 @@ export default {
           this.ifCardChosen = true;
         }
       }
-      // console.log(this.cardChosenComputed)
     },
     changeLanguage(lang) {
       this.langChosen = lang;
@@ -167,6 +187,7 @@ export default {
     }
   },
   created() {
+    console.log(this.cardsViewed)
     document.addEventListener("offline", this.onOffline, false);
   }
 }
@@ -176,6 +197,13 @@ export default {
 <style scoped lang="scss">
 .header {
   text-align: center;
+}
+
+.clear-input {
+  position: absolute;
+  font-size: 26px;
+  right: 10px;
+  padding: 10px;
 }
 
 .hs-logo {

@@ -1,5 +1,5 @@
 <template>
-  <div class="card-extra-info">
+  <div class="card-extra-info" v-if="ifChosenPassed">
     <v-ons-list>
       <v-ons-list-header>
         Card Description
@@ -68,9 +68,10 @@
 
 <script>
 export default {
-  props: ['cardPassed'],
+  props: ['cardPassed', 'ifChosenPassed'],
   data () {
     return {
+      cardsViewed: this.$store.state.cardsViewed
     }
   },
   methods: {
@@ -118,8 +119,14 @@ export default {
       }
     }
   },
-  created () {
-    console.log(this.cardPassed)
+  watch: {
+    ifChosenPassed(val) {
+      if (val) {
+        this.cardsViewed.push({
+          cardName: this.cardPassed.name
+        })
+      }
+    }
   }
 }
 </script>
