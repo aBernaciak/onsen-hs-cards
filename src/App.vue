@@ -42,6 +42,27 @@ export default {
 ons-splitter-side[side=left][animation=overlay] {
   border-right: 1px solid #BBB;
 }
+.list-header {
+  margin: 0;
+  list-style: none;
+  text-align: left;
+  display: block;
+  box-sizing: border-box;
+  padding: 0 0 0 15px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #1f1f21;
+  min-height: 24px;
+  line-height: 25px;
+  text-transform: uppercase;
+  position: relative;
+  background-color: #eee;
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+  background-position: top;
+  background-image: -webkit-linear-gradient(bottom, #ccc, #ccc 100%);
+  background-image: linear-gradient(0deg, #ccc, #ccc 100%);
+}
 .v-autocomplete {
   width: 100%;
   input {

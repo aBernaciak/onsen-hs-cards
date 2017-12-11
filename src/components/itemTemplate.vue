@@ -1,16 +1,16 @@
 <template>
   <div>
-    <strong>{{ item.name }}
+    <strong>{{ itemComputed.name }}
       <small class="pull-right">
-        <span :class="{priest : item.playerClass == 'PRIEST'}"
-              :style="{color: classColors[0][item.playerClass]}">
+        <span :class="{priest : itemComputed.playerClass == 'PRIEST'}"
+              :style="{color: classColors[0][itemComputed.playerClass]}">
 
-          {{item.playerClass | toLowerCase}}
-        </span> - {{item.type | toLowerCase}}
+          {{itemComputed.playerClass | toLowerCase}}
+        </span> - {{itemComputed.type | toLowerCase}}
       </small>
     </strong>
     <br>
-    <abbr v-html="item.text"></abbr>
+    <abbr v-html="itemComputed.text"></abbr>
   </div>
 </template>
 
@@ -35,7 +35,7 @@ export default {
           WARRIOR: '#C79C6E'
         }
       ],
-      // itemClass: this.item.playerClass
+      itemComputed: this.item
     }
   },
   filters: {
@@ -49,12 +49,14 @@ export default {
     }
   },
   created () {
-    // var test = this.itemClass;
-    // console.log(this.item.playerClass)
+    if(this.item.cardName != undefined) {
+      this.itemComputed = this.item.cardName;
+    }
+    else {
+      this.itemComputed = this.item;
+    }
   },
   destroyed() {
-    // console.log(this.item)
-    // this.$forceUpdate()
   }
 }
 </script>

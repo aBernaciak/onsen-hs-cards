@@ -35,7 +35,6 @@
                                          id: 'v-my-autocomplete',
                                          'class': 'search-input search-input--material'}">
           </v-autocomplete>
-          <v-ons-icon class="clear-input" style="color: red;" icon="fa-times" @click="clearInput"></v-ons-icon>
         </div>
       </v-ons-list-item>
       <v-ons-list-item>
@@ -49,9 +48,14 @@
       <CardDesc v-bind:ifChosenPassed="ifCardChosen"
                 v-bind:cardPassed="cardChosenComputed">
       </CardDesc>
+    </v-ons-list>
 
+    <v-ons-list class="recently-searched">
+      <v-ons-list-header>
+        Recently searched
+      </v-ons-list-header>
       <v-ons-list-item v-for="card in cards">
-        {{card.cardName}}
+        <div class="center" @click="item = card.cardName">{{ card.cardName.name }}</div>
       </v-ons-list-item>
     </v-ons-list>
 
@@ -88,20 +92,12 @@ export default {
       cardChosen: {},
       ifCardChosen: false,
       name: '',
-      cardsViewed: db.ref('cards-viewed')
     }
   },
   firebase: {
     cards: db.ref('cards-viewed')
   },
   methods: {
-    clearInput() {
-      let inputId = document.getElementById('v-my-autocomplete');
-      this.ifCardChosen = false;
-      this.itemsSorted = [];
-      inputId.value = '';
-      this.item = '';
-    },
     itemSelected (item) {
       this.ifCardChosen = false;
       this.search(item.name);
@@ -117,21 +113,11 @@ export default {
       }
       else if (text.length == 0) {
         this.ifCardChosen = false;
+        this.item = '';
         this.itemsSorted = [];
       }
     },
     getLabel (item) {
-      let inputId = document.getElementById('v-my-autocomplete');
-      if (inputId.value == '') {
-        return item.name;
-      }
-      else {
-        this.itemsSorted = [];
-        inputId.value = '';
-        this.item = '';
-        return '';
-      }
-      this.itemsSorted = [];
     },
     search(name) {
       this.ifCardChosen = false;
@@ -185,7 +171,6 @@ export default {
     }
   },
   created() {
-    console.log(this.cardsViewed)
     document.addEventListener("offline", this.onOffline, false);
   }
 }
@@ -197,11 +182,9 @@ export default {
   text-align: center;
 }
 
-.clear-input {
-  position: absolute;
-  font-size: 26px;
-  right: 10px;
-  padding: 10px;
+.recently-searched {
+  max-height: 300px;
+  overflow: auto;
 }
 
 .hs-logo {

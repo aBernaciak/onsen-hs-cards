@@ -5,8 +5,7 @@
         Card Description
       </v-ons-list-header>
       <v-ons-list-item>
-        <pre v-if="cardPassed.flavor">{{cardPassed.flavor}}</pre>
-        <p v-else>Card description is not available.</p>
+        <pre>{{cardPassed.flavor || 'Card description is not available.'}}</pre>
       </v-ons-list-item>
     </v-ons-list>
 
@@ -15,8 +14,7 @@
         Collectable
       </v-ons-list-header>
       <v-ons-list-item>
-        <p v-if="cardPassed.collectible"><strong>Yes</strong></p>
-        <p v-else><strong>No</strong></p>
+        <strong>{{ cardPassed.collectible || 'False' }}</strong>
       </v-ons-list-item>
     </v-ons-list>
 
@@ -24,18 +22,13 @@
       <v-ons-list-header>
         How to earn Card
       </v-ons-list-header>
-      <v-ons-list-item v-if="cardPassed.rarity && !(cardPassed.howToEarn)">
+      <v-ons-list-item>
         <div>
-          Crafting cost of normal card: <strong>{{cardPassed.rarity | extendedRarity}}</strong><br><br>
-          Crafting cost of golden card: <strong>{{cardPassed.rarity | extendedRarity(true)}}</strong>
+          Crafting cost of normal card:
+            <strong>{{ cardPassed.rarity || 'not available' | extendedRarity}}</strong><br><br>
+          Crafting cost of golden card:
+            <strong>{{ cardPassed.rarity || 'not available' | extendedRarity(true)}}</strong>
         </div>
-      </v-ons-list-item>
-      <v-ons-list-item v-else>
-        <p v-if="cardPassed.howToEarn"><strong>Normal</strong>: {{cardPassed.howToEarn}}</p>
-        <p v-else>How to earn card is not available.</p>
-
-        <p v-if="cardPassed.howToEarnGolden"><strong>Golden Card</strong>: {{cardPassed.howToEarnGolden}}</p>
-        <p v-else>How to earn golden card is not available.</p>
       </v-ons-list-item>
     </v-ons-list>
 
@@ -44,10 +37,7 @@
         Card Set
       </v-ons-list-header>
       <v-ons-list-item>
-        <p v-if="cardPassed.set">
-          <strong>From set</strong>: {{ cardPassed.set | extendedSet }}
-        </p>
-        <p v-else>Card set is not available.</p>
+        <strong>From set</strong>: {{ cardPassed.set || 'not available' | extendedSet }}
       </v-ons-list-item>
     </v-ons-list>
 
@@ -56,10 +46,9 @@
         Card Artist
       </v-ons-list-header>
       <v-ons-list-item>
-        <p v-if="cardPassed.artist">
-          <strong>Card art</strong> by {{cardPassed.artist}}
-        </p>
-        <p v-else><strong>Card artist</strong> is not available.</p>
+        <div class="center">
+          Card art by<strong>: {{cardPassed.artist || 'not available'}}</strong>
+        </div>
       </v-ons-list-item>
     </v-ons-list>
 
@@ -82,7 +71,7 @@ export default {
         case 'COMMON':
           return ifGolden ? 400 : 40;
         case 'RARE':
-          return ifGolden ? 800 : 100; 
+          return ifGolden ? 800 : 100;
         case 'EPIC':
           return ifGolden ? 1600 : 400;
         case 'LEGENDARY':
@@ -123,8 +112,8 @@ export default {
     ifChosenPassed(val) {
       if (val) {
         this.cardsViewed.push({
-          cardName: this.cardPassed.name
-        })
+          cardName: this.cardPassed
+        });
       }
     }
   }
