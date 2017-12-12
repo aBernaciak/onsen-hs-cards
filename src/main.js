@@ -24,6 +24,63 @@ Vue.use(VueOnsen)
 Vue.use(VueAxios, axios)
 Vue.use(require('vue-moment'));
 
+//global
+Vue.filter('extendedSet', function(setName) {
+ 	if (!setName) return ''
+  switch(setName) {
+    case 'GVG':
+      return 'Goblins vs Gnomes';
+    case 'TGT':
+      return 'The Grand Tournament';
+    case 'LOE':
+      return 'The League of Explorers';
+    case 'ICECROWN':
+      return 'Knights of the Frozen Throne';
+    case 'KARA':
+      return 'One night in Karazhan';
+    case 'BRM':
+      return 'Blackrock Mountain';
+    case 'GANGS':
+      return 'Mean streets of Gadgetzan';
+    case 'UNGORO':
+      return 'Journey to UN\'GORO';
+    case 'OG':
+      return 'Whispers of the Old Gods';
+    case 'HOF':
+      return 'Halls of Fame - no longer playable in standard mode.';
+    default:
+      return setName;
+  }
+});
+
+    // extendedSet(setName) {
+    //   if (!setName) return ''
+    //   switch(setName) {
+    //     case 'GVG':
+    //       return 'Goblins vs Gnomes';
+    //     case 'TGT':
+    //       return 'The Grand Tournament';
+    //     case 'LOE':
+    //       return 'The League of Explorers';
+    //     case 'ICECROWN':
+    //       return 'Knights of the Frozen Throne';
+    //     case 'KARA':
+    //       return 'One night in Karazhan';
+    //     case 'BRM':
+    //       return 'Blackrock Mountain';
+    //     case 'GANGS':
+    //       return 'Mean streets of Gadgetzan';
+    //     case 'UNGORO':
+    //       return 'Journey to UN\'GORO';
+    //     case 'OG':
+    //       return 'Whispers of the Old Gods';
+    //     case 'HOF':
+    //       return 'Halls of Fame - no longer playable in standard mode.';
+    //     default:
+    //       return setName;
+    //   }
+    // }
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

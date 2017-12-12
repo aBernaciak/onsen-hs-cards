@@ -5,11 +5,35 @@
       <img src="../assets/onsenui-logo.png">
     </div>
 
-    <v-ons-list-title>Onsen UI Essential Links</v-ons-list-title>
+    <v-ons-list-title>Application settings</v-ons-list-title>
     <v-ons-list>
-      <v-ons-list-item modifier="chevron" v-for="item in essentialLinks" @click="goTo(item.link)" :key="item.link">
-        <div class="left"><v-ons-icon fixed-width :icon="item.icon"></v-ons-icon></div>
-        <div class="center">{{ item.label }}</div>
+      <v-ons-list-item v-for="item in switchSettings">
+        <div class="left">
+          <v-ons-icon fixed-width :icon="item.icon"></v-ons-icon>
+        </div>
+        <div class="center">
+          {{ item.label }}
+        </div>
+        <div class="right">
+          <v-ons-switch @change="updateSwitch(item.switchOn)"
+                        v-model="item.switchOn">
+          </v-ons-switch>
+        </div>
+      </v-ons-list-item>
+    </v-ons-list>
+
+    <v-ons-list-title>Card Set Filters</v-ons-list-title>
+    <v-ons-list>
+      <v-ons-list-item v-for="(item, $index) in checkboxSettings">
+        <label class="left">
+          <v-ons-checkbox
+            :input-id="'checkbox-' + $index"
+            :value="item">
+          </v-ons-checkbox>
+        </label>
+        <label class="center" :for="'checkbox-' + $index">
+          {{ item | extendedSet }}
+        </label>
       </v-ons-list-item>
     </v-ons-list>
   </v-ons-page>
@@ -20,38 +44,19 @@ export default {
   name: 'menu',
   data () {
     return {
-      essentialLinks: [
+      switchSettings: [
         {
-          label: 'Docs',
-          link: 'https://onsen.io/v2/docs/guide/vue/',
-          icon: 'fa-book'
+          label: 'Show recent searches',
+          icon: 'fa-repeat',
+          switchOn: false
         },
-        {
-          label: 'Gitter Chat',
-          link: 'https://gitter.im/OnsenUI/OnsenUI',
-          icon: 'fa-commenting'
-        },
-        {
-          label: 'Forum',
-          link: 'https://community.onsen.io',
-          icon: 'ion-chatboxes'
-        },
-        {
-          label: 'Twitter',
-          link: 'https://twitter.com/Onsen_UI',
-          icon: 'fa-twitter'
-        },
-        {
-          label: 'Playground',
-          link: 'https://tutorial.onsen.io/',
-          icon: 'fa-graduation-cap'
-        }
-      ]
+      ],
+      checkboxSettings: ['GVG', 'TGT', 'OG', 'LOE', 'ICECROWN', 'KARA', 'BRM', 'GANGS', 'UNGORO', 'HOF']
     }
   },
   methods: {
-    goTo (url) {
-      window.open(url, '_blank')
+    updateSwitch(item) {
+      this.$store.commit('updateShowRecent', item);
     }
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <v-ons-page id="app">
     <v-ons-splitter>
-      <v-ons-splitter-side swipeable collapse width="250px"
+      <v-ons-splitter-side swipeable collapse width="300px"
         :animation="$ons.platform.isAndroid() ? 'overlay' : 'reveal'"
         :open.sync="menuIsOpen">
         <menu-page></menu-page>
@@ -33,12 +33,23 @@ export default {
   components: {
     HomePage,
     MenuPage
-  }
+  },
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
+.fade-enter-active {
+  transition: all .3s ease;
+}
+.fade-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.fade-enter, .fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
+}
 ons-splitter-side[side=left][animation=overlay] {
   border-right: 1px solid #BBB;
 }

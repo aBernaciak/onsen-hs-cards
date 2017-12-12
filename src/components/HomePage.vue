@@ -39,25 +39,41 @@
       </v-ons-list-item>
       <v-ons-list-item>
 
-        <CardImage v-bind:ifChosenPassed="ifCardChosen"
-                   v-bind:imgSrcPassed="imgChosen">
-        </CardImage>
+        <div class="center">
+
+          <v-ons-icon  v-if="ifCardChosen"
+                       @click="clearCard"
+                       size="35px"
+                       style="color: red" icon="fa-times"
+                       class="close-icon">      
+          </v-ons-icon>
+          <transition name="fade">
+            <CardImage v-bind:ifChosenPassed="ifCardChosen"
+                       v-bind:imgSrcPassed="imgChosen">
+            </CardImage>
+          </transition>
+
+        </div>
 
       </v-ons-list-item>
 
-      <CardDesc v-bind:ifChosenPassed="ifCardChosen"
-                v-bind:cardPassed="cardChosenComputed">
-      </CardDesc>
+      <transition name="fade">
+        <CardDesc v-bind:ifChosenPassed="ifCardChosen"
+                  v-bind:cardPassed="cardChosenComputed">
+        </CardDesc>
+      </transition>
     </v-ons-list>
 
-    <v-ons-list class="recently-searched">
-      <v-ons-list-header>
-        Recently searched
-      </v-ons-list-header>
-      <v-ons-list-item v-for="card in cards">
-        <div class="center" @click="item = card.cardName">{{ card.cardName.name }}</div>
-      </v-ons-list-item>
-    </v-ons-list>
+    <transition name="fade">
+      <v-ons-list class="recently-searched" v-show="$store.state.showRecent">
+        <v-ons-list-header>
+          Recently searched <small class="pull-right">(Last 7 searches)</small>
+        </v-ons-list-header>
+        <v-ons-list-item v-for="card in cards">
+          <div class="center" @click="setRecently(card.cardName)">{{ card.cardName.name }}</div>
+        </v-ons-list-item>
+      </v-ons-list>
+    </transition>
 
     <v-ons-action-sheet :visible.sync="actionSheetVisible" cancelable title="Change language">
       <v-ons-action-sheet-button icon="md-square-o" v-for="(lang, index) in langArray" @click="changeLanguage(lang)">
@@ -98,6 +114,15 @@ export default {
     cards: db.ref('cards-viewed')
   },
   methods: {
+    clearCard(){
+      this.ifCardChosen = false;
+      this.itemsSorted = [];
+      this.item = '';
+    },
+    setRecently(card) {
+      this.cardChosen = [card];
+      this.ifCardChosen = true; 
+    },
     itemSelected (item) {
       this.ifCardChosen = false;
       this.search(item.name);
@@ -180,6 +205,12 @@ export default {
 <style scoped lang="scss">
 .header {
   text-align: center;
+}
+
+.close-icon {
+  position: absolute;
+  right: 10px;
+  top: 15px;
 }
 
 .recently-searched {

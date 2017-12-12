@@ -11,11 +11,15 @@ Vue.use(VueFire)
 export default new Vuex.Store({
   state: {
     cardsArray: Cards,
-    cardsViewed: db.ref('cards-viewed')
+    cardsViewed: db.ref('cards-viewed'),
+    showRecent: false,
   },
   mutations: {
     updateCards(state, newCards) {
       return state.cardsArray = newCards;
+    },
+    updateShowRecent(state, newState) {
+      return state.showRecent = !newState;
     }
   },
   modules: {
