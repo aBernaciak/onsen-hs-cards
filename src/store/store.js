@@ -13,6 +13,7 @@ export default new Vuex.Store({
     cardsArray: Cards,
     cardsViewed: db.ref('cards-viewed'),
     showRecent: false,
+    filtersArray: ['LOOTAPALOOZA', 'GVG', 'TGT', 'OG', 'LOE', 'ICECROWN', 'KARA', 'BRM', 'GANGS', 'UNGORO', 'HOF']
   },
   mutations: {
     updateCards(state, newCards) {
@@ -20,6 +21,9 @@ export default new Vuex.Store({
     },
     updateShowRecent(state, newState) {
       return state.showRecent = !newState;
+    },
+    updateFilters(state, newFilters) {
+      return state.filtersArray = newFilters;
     }
   },
   modules: {

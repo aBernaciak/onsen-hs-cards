@@ -27,6 +27,7 @@
       <v-ons-list-item v-for="(item, $index) in checkboxSettings">
         <label class="left">
           <v-ons-checkbox
+            v-model='filtersArray'
             :input-id="'checkbox-' + $index"
             :value="item">
           </v-ons-checkbox>
@@ -51,14 +52,20 @@ export default {
           switchOn: false
         },
       ],
-      checkboxSettings: ['GVG', 'TGT', 'OG', 'LOE', 'ICECROWN', 'KARA', 'BRM', 'GANGS', 'UNGORO', 'HOF']
+      checkboxSettings: ['LOOTAPALOOZA', 'GVG', 'TGT', 'OG', 'LOE', 'ICECROWN', 'KARA', 'BRM', 'GANGS', 'UNGORO', 'HOF'],
+      filtersArray: this.$store.state.filtersArray
     }
   },
   methods: {
     updateSwitch(item) {
       this.$store.commit('updateShowRecent', item);
     }
-  }
+  },
+  watch: {
+    filtersArray() {
+      this.$store.commit('updateFilters', this.filtersArray);
+    }
+  },
 }
 </script>
 

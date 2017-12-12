@@ -63,8 +63,6 @@ export default {
       cardsViewed: this.$store.state.cardsViewed
     }
   },
-  methods: {
-  },
   filters: {
     extendedRarity(rarity, ifGolden) {
       switch(rarity) {
@@ -96,6 +94,7 @@ export default {
 <style scoped lang="scss">
 pre {
   white-space: normal;
+  margin: 0;
 }
 .card-extra-info {
   display: block;

@@ -23,9 +23,9 @@
       <v-ons-list-item>
         <div class="center">
           <v-autocomplete v-model='item'
-                          :items="itemsSorted"
+                          :items="itemsSortedComputed"
                           :min-len='0'
-                          :wait='400'
+                          :wait='200'
                           :get-label="getLabel"
                           :component-item='template'
                           :auto-select-one-item="false"
@@ -45,7 +45,7 @@
                        @click="clearCard"
                        size="35px"
                        style="color: red" icon="fa-times"
-                       class="close-icon">      
+                       class="close-icon">
           </v-ons-icon>
           <transition name="fade">
             <CardImage v-bind:ifChosenPassed="ifCardChosen"
@@ -121,7 +121,7 @@ export default {
     },
     setRecently(card) {
       this.cardChosen = [card];
-      this.ifCardChosen = true; 
+      this.ifCardChosen = true;
     },
     itemSelected (item) {
       this.ifCardChosen = false;
@@ -193,6 +193,9 @@ export default {
       if(typeof this.cardChosen[0] !== 'undefined') {
         return this.cardChosen[0].src;
       }
+    },
+    itemsSortedComputed() {
+      return this.itemsSorted.filter(el => el.set == [this.$store.state.filtersArray]);
     }
   },
   created() {
@@ -211,6 +214,7 @@ export default {
   position: absolute;
   right: 10px;
   top: 15px;
+  padding: 10px;
 }
 
 .recently-searched {

@@ -28,6 +28,8 @@ Vue.use(require('vue-moment'));
 Vue.filter('extendedSet', function(setName) {
  	if (!setName) return ''
   switch(setName) {
+    case 'LOOTAPALOOZA':
+      return 'Kobolds and Catacombs';
     case 'GVG':
       return 'Goblins vs Gnomes';
     case 'TGT':
@@ -47,7 +49,7 @@ Vue.filter('extendedSet', function(setName) {
     case 'OG':
       return 'Whispers of the Old Gods';
     case 'HOF':
-      return 'Halls of Fame - no longer playable in standard mode.';
+      return 'Halls of Fame - no longer playable in standard mode';
     default:
       return setName;
   }
