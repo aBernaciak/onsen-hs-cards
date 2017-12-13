@@ -14,7 +14,7 @@
     </v-ons-toolbar>
 
     <div class="header">
-      <img src="https://eu.battle.net/forums/static/images/game-logos/game-logo-hearthstone.png" class="hs-logo">
+      <img src="https://eu.battle.net/forums/static/images/game-logos/game-logo-hearthstone.png" class="hs-logo" @click="test">
     </div>
     <v-ons-list>
       <v-ons-list-header>
@@ -69,9 +69,11 @@
         <v-ons-list-header>
           Recently searched <small class="pull-right">(Last 7 searches)</small>
         </v-ons-list-header>
+        <div class="recently-searched-container">
         <v-ons-list-item v-for="card in cards">
           <div class="center" @click="setRecently(card.cardName)">{{ card.cardName.name }}</div>
         </v-ons-list-item>
+        </div>
       </v-ons-list>
     </transition>
 
@@ -114,6 +116,10 @@ export default {
     cards: db.ref('cards-viewed')
   },
   methods: {
+    test() {
+      console.log(CardDesc)
+      // this.$router.push({CardDesc})
+    },
     clearCard(){
       this.ifCardChosen = false;
       this.itemsSorted = [];
@@ -183,6 +189,16 @@ export default {
       `);
     }
   },
+  watch: {
+    cards() {
+      // this.cards = this.cards.reverse();
+      this.$forceUpdate();
+    },
+    itemsSorted() {
+      this.itemsSorted.filter(el => this.$store.state.filtersArray.includes(el.set));
+      console.log(this.itemsSorted, this.$store.state.filtersArray)
+    }
+  },
   computed: {
     cardChosenComputed() {
       if(typeof this.cardChosen[0] !== 'undefined') {
@@ -195,10 +211,11 @@ export default {
       }
     },
     itemsSortedComputed() {
-      return this.itemsSorted.filter(el => el.set == [this.$store.state.filtersArray]);
+      return this.itemsSorted;
     }
   },
   created() {
+    // this.cards = this.cards.reverse();
     document.addEventListener("offline", this.onOffline, false);
   }
 }
@@ -220,6 +237,10 @@ export default {
 .recently-searched {
   max-height: 300px;
   overflow: auto;
+  .recently-searched-container {
+    display: flex; 
+    flex-direction: column-reverse;
+  }
 }
 
 .hs-logo {
