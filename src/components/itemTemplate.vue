@@ -1,7 +1,7 @@
 <template>
   <div>
     <strong>{{ itemComputed.name }}
-      <small class="pull-right">
+      <small class="pull-right" v-if="itemComputed.playerClass">
         <span :class="{priest : itemComputed.playerClass == 'PRIEST'}"
               :style="{color: classColors[0][itemComputed.playerClass]}">
 

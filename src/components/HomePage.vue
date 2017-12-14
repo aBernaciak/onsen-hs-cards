@@ -136,6 +136,7 @@ export default {
     update (text) {
       var itamz = this.cardArray;
       if(text.length >= 3) {
+        this.itemsSorted = [];
         this.itemsSorted = itamz.filter((item) => {
           if(item.name != undefined) {
             return (new RegExp(text.toLowerCase())).test(item.name.toLowerCase())
@@ -154,6 +155,7 @@ export default {
       this.ifCardChosen = false;
       this.cardChosen = {};
       var array = this.cardArray;
+      console.log(this.itemsSorted)
       if (name != '') {
         this.cardChosen = array.filter(function (el) {
           if (el.name == name) {
@@ -194,10 +196,6 @@ export default {
       // this.cards = this.cards.reverse();
       this.$forceUpdate();
     },
-    itemsSorted() {
-      this.itemsSorted.filter(el => this.$store.state.filtersArray.includes(el.set));
-      console.log(this.itemsSorted, this.$store.state.filtersArray)
-    }
   },
   computed: {
     cardChosenComputed() {
@@ -211,7 +209,7 @@ export default {
       }
     },
     itemsSortedComputed() {
-      return this.itemsSorted;
+      return this.itemsSorted.filter(el => this.$store.state.filtersArray.includes(el.set));
     }
   },
   created() {
@@ -238,7 +236,7 @@ export default {
   max-height: 300px;
   overflow: auto;
   .recently-searched-container {
-    display: flex; 
+    display: flex;
     flex-direction: column-reverse;
   }
 }
