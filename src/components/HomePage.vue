@@ -14,7 +14,7 @@
     </v-ons-toolbar>
 
     <div class="header">
-      <img src="https://eu.battle.net/forums/static/images/game-logos/game-logo-hearthstone.png" class="hs-logo" @click="test">
+      <img src="https://eu.battle.net/forums/static/images/game-logos/game-logo-hearthstone.png" class="hs-logo">
     </div>
     <v-ons-list>
       <v-ons-list-header>
@@ -116,10 +116,6 @@ export default {
     cards: db.ref('cards-viewed')
   },
   methods: {
-    test() {
-      console.log(CardDesc)
-      // this.$router.push({CardDesc})
-    },
     clearCard(){
       this.ifCardChosen = false;
       this.itemsSorted = [];
@@ -155,7 +151,6 @@ export default {
       this.ifCardChosen = false;
       this.cardChosen = {};
       var array = this.cardArray;
-      console.log(this.itemsSorted)
       if (name != '') {
         this.cardChosen = array.filter(function (el) {
           if (el.name == name) {
@@ -209,11 +204,12 @@ export default {
       }
     },
     itemsSortedComputed() {
-      return this.itemsSorted.filter(el => this.$store.state.filtersArray.includes(el.set));
+      return this.itemsSorted.filter(el => 
+        this.$store.state.filtersArraySet.changed.includes(el.set)
+      );
     }
   },
   created() {
-    // this.cards = this.cards.reverse();
     document.addEventListener("offline", this.onOffline, false);
   }
 }

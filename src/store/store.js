@@ -13,7 +13,14 @@ export default new Vuex.Store({
     cardsArray: Cards,
     cardsViewed: db.ref('cards-viewed'),
     showRecent: false,
-    filtersArray: ['LOOTAPALOOZA', 'GVG', 'TGT', 'OG', 'LOE', 'ICECROWN', 'KARA', 'BRM', 'GANGS', 'UNGORO', 'HOF']
+    filtersArraySet: {
+      initial: ['LOOTAPALOOZA', 'GVG', 'TGT', 'OG', 'LOE', 'ICECROWN', 'KARA', 'BRM', 'GANGS', 'UNGORO', 'HOF'],
+      changed: ['LOOTAPALOOZA', 'GVG', 'TGT', 'OG', 'LOE', 'ICECROWN', 'KARA', 'BRM', 'GANGS', 'UNGORO', 'HOF']
+    },
+    filtersArrayClass: {
+      initial: ['Mage', 'Priest', 'Warlock', 'Hunter', 'Paladin', 'Warrior', 'Druid', 'Shaman', 'Rogue'],
+      changed: ['Mage', 'Priest', 'Warlock', 'Hunter', 'Paladin', 'Warrior', 'Druid', 'Shaman', 'Rogue']
+    }
   },
   mutations: {
     updateCards(state, newCards) {
@@ -22,8 +29,8 @@ export default new Vuex.Store({
     updateShowRecent(state, newState) {
       return state.showRecent = !newState;
     },
-    updateFilters(state, newFilters) {
-      return state.filtersArray = newFilters;
+    updateFilters(state, newFilters, filter) {
+      return state.filtersArraySet.changed = newFilters;
     }
   },
   modules: {

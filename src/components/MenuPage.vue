@@ -7,7 +7,7 @@
 
     <v-ons-list-title>Application settings</v-ons-list-title>
     <v-ons-list>
-      <v-ons-list-item v-for="item in switchSettings">
+      <v-ons-list-item v-for="item in recentlySearched">
         <div class="left">
           <v-ons-icon fixed-width :icon="item.icon"></v-ons-icon>
         </div>
@@ -22,21 +22,26 @@
       </v-ons-list-item>
     </v-ons-list>
 
-    <v-ons-list-title>Card Set Filters</v-ons-list-title>
-    <v-ons-list>
-      <v-ons-list-item v-for="(item, $index) in checkboxSettings">
-        <label class="left">
-          <v-ons-checkbox
-            v-model='filtersArray'
-            :input-id="'checkbox-' + $index"
-            :value="item">
-          </v-ons-checkbox>
-        </label>
-        <label class="center" :for="'checkbox-' + $index">
-          {{ item | extendedSet }}
-        </label>
-      </v-ons-list-item>
-    </v-ons-list>
+    <div class="filters-container" v-for="filter in filters">
+      <v-ons-list-title>
+        {{filter.title}}
+        <v-ons-icon class="pull-right" icon="fa-chevron-down"></v-ons-icon>
+      </v-ons-list-title>
+      <v-ons-list class="expandable-filter">
+        <v-ons-list-item v-for="(item, $index) in filter.initial">
+          <label class="left">
+            <v-ons-checkbox
+              v-model='filter.changed'
+              :input-id="`checkbox-${$index}-${filter.title}`"
+              :value="item">
+            </v-ons-checkbox>
+          </label>
+          <label class="center" :for="`checkbox-${$index}-${filter.title}`">
+            {{ item | extendedSet }}
+          </label>
+        </v-ons-list-item>
+      </v-ons-list>
+    </div>
   </v-ons-page>
 </template>
 
@@ -45,15 +50,25 @@ export default {
   name: 'menu',
   data () {
     return {
-      switchSettings: [
+      recentlySearched: [
         {
           label: 'Show recent searches',
           icon: 'fa-repeat',
           switchOn: false
         },
       ],
-      checkboxSettings: ['LOOTAPALOOZA', 'GVG', 'TGT', 'OG', 'LOE', 'ICECROWN', 'KARA', 'BRM', 'GANGS', 'UNGORO', 'HOF'],
-      filtersArray: this.$store.state.filtersArray
+      filters: {
+        cardSet: {
+          title: 'Card Set Filters',
+          initial: this.$store.state.filtersArraySet.initial,
+          changed: this.$store.state.filtersArraySet.changed
+        },
+        cardClass: {
+          title: 'Card Class Filters',
+          initial: this.$store.state.filtersArrayClass.initial,
+          changed: this.$store.state.filtersArrayClass.changed
+        }
+      }
     }
   },
   methods: {
@@ -62,10 +77,21 @@ export default {
     }
   },
   watch: {
-    filtersArray() {
-      this.$store.commit('updateFilters', this.filtersArray);
+    // 'filters.cardSet.changed'() {
+    //   this.$store.commit('updateFilters', this.filters.cardSet.changed);
+    // }
+    filters: {
+      handler(newVal) {
+        console.log(newVal.cardSet.changed, newVal.cardSet.changed)
+        if(newVal.cardSet.changed != newVal.cardSet.initial) {
+          console.log('asd')
+        }
+      },
+      deep: true
     }
   },
+  created(){
+  }
 }
 </script>
 
