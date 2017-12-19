@@ -204,8 +204,10 @@ export default {
       }
     },
     itemsSortedComputed() {
-      return this.itemsSorted.filter(el => 
-        this.$store.state.filtersArraySet.changed.includes(el.set)
+      console.log(this.itemsSorted)
+      return this.itemsSorted.filter(el =>
+        this.$store.state.filters.cardSet.changed.includes(el.set) &&
+        this.$store.state.filters.cardClass.changed.includes(el.playerClass)
       );
     }
   },

@@ -1,8 +1,36 @@
 <template>
-  <v-ons-page>
+  <v-ons-page class="menu-container">
     <v-ons-toolbar modifier="transparent"></v-ons-toolbar>
     <div class="header">
-      <img src="../assets/onsenui-logo.png">
+      <v-ons-icon size="90px" icon="fa-cog"></v-ons-icon>
+    </div>
+
+    <div class="filters-container" v-for="(filter, index1) in filters">
+
+      <v-ons-list-title class="filter-header" @click="toggleDropdown(index1)">
+        {{filter.title}}
+        <v-ons-icon class="pull-right"
+                    icon="fa-chevron-down"
+                    :class="{ expanded: filter.expanded }">
+        </v-ons-icon>
+      </v-ons-list-title>
+
+      <v-ons-list class="expandable-filter"
+                  :class="{ expanded: filter.expanded }">
+
+        <v-ons-list-item v-for="(item, index2) in filter.initial">
+          <label class="left">
+            <v-ons-checkbox
+              v-model='filter.changed'
+              :input-id="`checkbox-${index1}-${index2}`"
+              :value="item">
+            </v-ons-checkbox>
+          </label>
+          <label class="center" :for="`checkbox-${index1}-${index2}`">
+            {{ item | extendedSet }}
+          </label>
+        </v-ons-list-item>
+      </v-ons-list>
     </div>
 
     <v-ons-list-title>Application settings</v-ons-list-title>
@@ -21,27 +49,6 @@
         </div>
       </v-ons-list-item>
     </v-ons-list>
-
-    <div class="filters-container" v-for="filter in filters">
-      <v-ons-list-title>
-        {{filter.title}}
-        <v-ons-icon class="pull-right" icon="fa-chevron-down"></v-ons-icon>
-      </v-ons-list-title>
-      <v-ons-list class="expandable-filter">
-        <v-ons-list-item v-for="(item, $index) in filter.initial">
-          <label class="left">
-            <v-ons-checkbox
-              v-model='filter.changed'
-              :input-id="`checkbox-${$index}-${filter.title}`"
-              :value="item">
-            </v-ons-checkbox>
-          </label>
-          <label class="center" :for="`checkbox-${$index}-${filter.title}`">
-            {{ item | extendedSet }}
-          </label>
-        </v-ons-list-item>
-      </v-ons-list>
-    </div>
   </v-ons-page>
 </template>
 
@@ -60,13 +67,15 @@ export default {
       filters: {
         cardSet: {
           title: 'Card Set Filters',
-          initial: this.$store.state.filtersArraySet.initial,
-          changed: this.$store.state.filtersArraySet.changed
+          initial: this.$store.state.filters.cardSet.initial,
+          changed: this.$store.state.filters.cardSet.changed,
+          expanded: false
         },
         cardClass: {
           title: 'Card Class Filters',
-          initial: this.$store.state.filtersArrayClass.initial,
-          changed: this.$store.state.filtersArrayClass.changed
+          initial: this.$store.state.filters.cardClass.initial,
+          changed: this.$store.state.filters.cardClass.changed,
+          expanded: false
         }
       }
     }
@@ -74,18 +83,23 @@ export default {
   methods: {
     updateSwitch(item) {
       this.$store.commit('updateShowRecent', item);
+    },
+    toggleDropdown(filter) {
+      this.filters[filter].expanded = !this.filters[filter].expanded;
     }
   },
   watch: {
-    // 'filters.cardSet.changed'() {
-    //   this.$store.commit('updateFilters', this.filters.cardSet.changed);
-    // }
     filters: {
       handler(newVal) {
-        console.log(newVal.cardSet.changed, newVal.cardSet.changed)
-        if(newVal.cardSet.changed != newVal.cardSet.initial) {
-          console.log('asd')
-        }
+        // const containsAll = (arr1, arr2) => arr2.every(arr2Item => arr1.includes(arr2Item))
+        // const sameMembers = (arr1, arr2) => containsAll(arr1, arr2) && containsAll(arr2, arr1);
+        this.$store.commit('updateFilters', newVal);
+        // if(sameMembers(newVal.cardSet.changed, newVal.cardSet.initial)) {
+        //   this.$store.commit('updateFilters', newVal.cardSet.changed, 'cardSet');
+        // }
+        // if(sameMembers(newVal.cardClass.changed, newVal.cardClass.initial)) {
+        //   this.$store.commit('updateFilters', newVal.cardClass.changed, 'cardClass');
+        // }
       },
       deep: true
     }
@@ -100,6 +114,27 @@ export default {
 .header {
   text-align: center;
   margin-bottom: 20px;
+}
+
+.page__content {
+  overflow: scroll;
+  display: none;
+}
+
+.filter-header {
+  padding-right: 10px;
+  ons-icon.expanded {
+    transform: rotate(90deg);
+    transition: all ease-in .4s;
+  }
+}
+
+.expandable-filter {
+  max-height: 56px;
+  transition: max-height ease-in .6s;
+  &.expanded {
+    max-height: 1000px;
+  }
 }
 
 img {

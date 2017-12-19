@@ -13,13 +13,15 @@ export default new Vuex.Store({
     cardsArray: Cards,
     cardsViewed: db.ref('cards-viewed'),
     showRecent: false,
-    filtersArraySet: {
-      initial: ['LOOTAPALOOZA', 'GVG', 'TGT', 'OG', 'LOE', 'ICECROWN', 'KARA', 'BRM', 'GANGS', 'UNGORO', 'HOF'],
-      changed: ['LOOTAPALOOZA', 'GVG', 'TGT', 'OG', 'LOE', 'ICECROWN', 'KARA', 'BRM', 'GANGS', 'UNGORO', 'HOF']
-    },
-    filtersArrayClass: {
-      initial: ['Mage', 'Priest', 'Warlock', 'Hunter', 'Paladin', 'Warrior', 'Druid', 'Shaman', 'Rogue'],
-      changed: ['Mage', 'Priest', 'Warlock', 'Hunter', 'Paladin', 'Warrior', 'Druid', 'Shaman', 'Rogue']
+    filters: {
+      cardSet: {
+        initial: ['LOOTAPALOOZA', 'GVG', 'TGT', 'OG', 'LOE', 'ICECROWN', 'KARA', 'BRM', 'GANGS', 'UNGORO', 'HOF'],
+        changed: ['LOOTAPALOOZA', 'GVG', 'TGT', 'OG', 'LOE', 'ICECROWN', 'KARA', 'BRM', 'GANGS', 'UNGORO', 'HOF']
+      },
+      cardClass: {
+        initial: ['MAGE', 'PRIEST', 'WARLOCK', 'HUNTER', 'PALADIN', 'WARRIOR', 'DRUID', 'SHAMAN', 'ROGUE', 'NEUTRAL'],
+        changed: ['MAGE', 'PRIEST', 'WARLOCK', 'HUNTER', 'PALADIN', 'WARRIOR', 'DRUID', 'SHAMAN', 'ROGUE', 'NEUTRAL']
+      }
     }
   },
   mutations: {
@@ -29,8 +31,8 @@ export default new Vuex.Store({
     updateShowRecent(state, newState) {
       return state.showRecent = !newState;
     },
-    updateFilters(state, newFilters, filter) {
-      return state.filtersArraySet.changed = newFilters;
+    updateFilters(state, newFilters) {
+      return state.filters = newFilters;
     }
   },
   modules: {
