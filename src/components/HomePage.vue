@@ -205,14 +205,19 @@ export default {
       }
     },
     itemsSortedComputed() {
-      console.log(this.itemsSorted)
-      let result = this.itemsSorted.filter(el =>
+      // console.log(this.itemsSorted)
+      // let result = this.itemsSorted.filter(el =>
+      //   this.$store.state.filters.cardSet.changed.includes(el.set) &&
+      //   this.$store.state.filters.cardClass.changed.includes(el.playerClass) &&
+      //   this.$store.state.filters.cardType.changed.includes(el.type)
+      // );
+      // console.log(result)
+      // return this.itemsSorted;
+      return this.itemsSorted.filter(el =>
         this.$store.state.filters.cardSet.changed.includes(el.set) &&
         this.$store.state.filters.cardClass.changed.includes(el.playerClass) &&
         this.$store.state.filters.cardType.changed.includes(el.type)
       );
-      console.log(result)
-      return this.itemsSorted
     }
   },
   created() {
