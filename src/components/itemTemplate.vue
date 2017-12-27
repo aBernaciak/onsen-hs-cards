@@ -57,6 +57,7 @@ export default {
     }
   },
   destroyed() {
+    this.$forceUpdate();
   }
 }
 </script>

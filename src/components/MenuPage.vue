@@ -10,8 +10,8 @@
       <v-ons-list-title class="filter-header" @click="toggleDropdown(index1)">
         {{filter.title}}
         <v-ons-icon class="pull-right"
-                    icon="fa-chevron-down"
-                    :class="{ expanded: filter.expanded }">
+                    icon="fa-plus"
+                    :class="{ 'expanded' : filter.expanded }">
         </v-ons-icon>
       </v-ons-list-title>
 
@@ -27,7 +27,7 @@
             </v-ons-checkbox>
           </label>
           <label class="center" :for="`checkbox-${index1}-${index2}`">
-            {{ item | extendedSet }}
+            {{ item | extendedSet | downcase }}
           </label>
         </v-ons-list-item>
       </v-ons-list>
@@ -64,20 +64,7 @@ export default {
           switchOn: false
         },
       ],
-      filters: {
-        cardSet: {
-          title: 'Card Set Filters',
-          initial: this.$store.state.filters.cardSet.initial,
-          changed: this.$store.state.filters.cardSet.changed,
-          expanded: false
-        },
-        cardClass: {
-          title: 'Card Class Filters',
-          initial: this.$store.state.filters.cardClass.initial,
-          changed: this.$store.state.filters.cardClass.changed,
-          expanded: false
-        }
-      }
+      filters: this.$store.state.filters
     }
   },
   methods: {
@@ -94,6 +81,7 @@ export default {
         // const containsAll = (arr1, arr2) => arr2.every(arr2Item => arr1.includes(arr2Item))
         // const sameMembers = (arr1, arr2) => containsAll(arr1, arr2) && containsAll(arr2, arr1);
         this.$store.commit('updateFilters', newVal);
+        console.log(this.$store.state.filters)
         // if(sameMembers(newVal.cardSet.changed, newVal.cardSet.initial)) {
         //   this.$store.commit('updateFilters', newVal.cardSet.changed, 'cardSet');
         // }
@@ -102,6 +90,12 @@ export default {
         // }
       },
       deep: true
+    }
+  },
+  filters: {
+    downcase(text) {
+      let result  = text.toLowerCase().replace(/[_]/g, " ");
+      return result.charAt(0).toUpperCase() + result.slice(1);
     }
   },
   created(){
@@ -123,9 +117,13 @@ export default {
 
 .filter-header {
   padding-right: 10px;
-  ons-icon.expanded {
-    transform: rotate(90deg);
+  ons-icon {
     transition: all ease-in .4s;
+    &.expanded {
+      &:before {
+        content: "\F068";
+      }
+    }
   }
 }
 

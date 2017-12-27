@@ -14,7 +14,7 @@
     </v-ons-toolbar>
 
     <div class="header">
-      <img src="https://eu.battle.net/forums/static/images/game-logos/game-logo-hearthstone.png" class="hs-logo">
+      <img src="../assets/game-logo-hearthstone.png" class="hs-logo">
     </div>
     <v-ons-list>
       <v-ons-list-header>
@@ -25,7 +25,7 @@
           <v-autocomplete v-model='item'
                           :items="itemsSortedComputed"
                           :min-len='0'
-                          :wait='200'
+                          :wait='100'
                           :get-label="getLabel"
                           :component-item='template'
                           :auto-select-one-item="false"
@@ -146,6 +146,7 @@ export default {
       }
     },
     getLabel (item) {
+      return item.name;
     },
     search(name) {
       this.ifCardChosen = false;
@@ -205,10 +206,13 @@ export default {
     },
     itemsSortedComputed() {
       console.log(this.itemsSorted)
-      return this.itemsSorted.filter(el =>
+      let result = this.itemsSorted.filter(el =>
         this.$store.state.filters.cardSet.changed.includes(el.set) &&
-        this.$store.state.filters.cardClass.changed.includes(el.playerClass)
+        this.$store.state.filters.cardClass.changed.includes(el.playerClass) &&
+        this.$store.state.filters.cardType.changed.includes(el.type)
       );
+      console.log(result)
+      return this.itemsSorted
     }
   },
   created() {
@@ -241,7 +245,7 @@ export default {
 
 .hs-logo {
   max-width: 300px;
-  margin: 0 auto;
+  margin: 0 auto -5px;
 }
 
 ons-list-title:not(:first-of-type) {

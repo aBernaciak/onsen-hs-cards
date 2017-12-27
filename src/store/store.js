@@ -15,12 +15,22 @@ export default new Vuex.Store({
     showRecent: false,
     filters: {
       cardSet: {
-        initial: ['LOOTAPALOOZA', 'GVG', 'TGT', 'OG', 'LOE', 'ICECROWN', 'KARA', 'BRM', 'GANGS', 'UNGORO', 'HOF'],
-        changed: ['LOOTAPALOOZA', 'GVG', 'TGT', 'OG', 'LOE', 'ICECROWN', 'KARA', 'BRM', 'GANGS', 'UNGORO', 'HOF']
+        title: 'Card Set Filters',
+        initial: ['LOOTAPALOOZA', 'GVG', 'TGT', 'OG', 'LOE', 'ICECROWN', 'KARA', 'BRM', 'GANGS', 'UNGORO', 'HOF', 'CORE'],
+        changed: ['LOOTAPALOOZA', 'GVG', 'TGT', 'OG', 'LOE', 'ICECROWN', 'KARA', 'BRM', 'GANGS', 'UNGORO', 'HOF', 'CORE'],
+        expanded: false
       },
       cardClass: {
+        title: 'Card Class Filters',
         initial: ['MAGE', 'PRIEST', 'WARLOCK', 'HUNTER', 'PALADIN', 'WARRIOR', 'DRUID', 'SHAMAN', 'ROGUE', 'NEUTRAL'],
-        changed: ['MAGE', 'PRIEST', 'WARLOCK', 'HUNTER', 'PALADIN', 'WARRIOR', 'DRUID', 'SHAMAN', 'ROGUE', 'NEUTRAL']
+        changed: ['MAGE', 'PRIEST', 'WARLOCK', 'HUNTER', 'PALADIN', 'WARRIOR', 'DRUID', 'SHAMAN', 'ROGUE', 'NEUTRAL'],
+        expanded: false
+      },
+      cardType: {
+        title: 'Card Type Filters',
+        initial: ['HERO_POWER', 'SPELL', 'ENCHANTMENT', 'MINION'],
+        changed: ['HERO_POWER', 'SPELL', 'ENCHANTMENT', 'MINION'],
+        expanded: false
       }
     }
   },
