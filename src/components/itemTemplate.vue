@@ -1,16 +1,16 @@
 <template>
   <div>
-    <strong>{{ itemComputed.name }}
-      <small class="pull-right" v-if="itemComputed.playerClass">
-        <span :class="{priest : itemComputed.playerClass == 'PRIEST'}"
-              :style="{color: classColors[0][itemComputed.playerClass]}">
+    <strong>{{ item.name }}
+      <small class="pull-right" v-if="item.playerClass">
+        <span :class="{priest : item.playerClass == 'PRIEST'}"
+              :style="{color: classColors[0][item.playerClass]}">
 
-          {{itemComputed.playerClass | toLowerCase}}
-        </span> - {{itemComputed.type | toLowerCase}}
+          {{item.playerClass | toLowerCase}}
+        </span> - {{item.type | toLowerCase}}
       </small>
     </strong>
     <br>
-    <abbr v-html="itemComputed.text"></abbr>
+    <abbr v-html="item.text"></abbr>
   </div>
 </template>
 
@@ -35,7 +35,6 @@ export default {
           WARRIOR: '#C79C6E'
         }
       ],
-      itemComputed: this.item
     }
   },
   filters: {
@@ -46,14 +45,6 @@ export default {
         text[i] = text[i].charAt(0).toUpperCase() + text[i].slice(1);
       }
       return text.join(' ');
-    }
-  },
-  created () {
-    if(this.item.cardName != undefined) {
-      this.itemComputed = this.item.cardName;
-    }
-    else {
-      this.itemComputed = this.item;
     }
   },
   destroyed() {
