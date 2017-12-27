@@ -104,7 +104,7 @@ export default {
       itemsSorted: [],
       template: ItemTemplate,
       actionSheetVisible: false,
-      cardArray: this.$store.state.cardsArray,
+      cardArray: null,
       langArray: ['enUS', 'plPL', 'DeDE'],
       langChosen: 'enUS',
       cardChosen: {},
@@ -205,14 +205,6 @@ export default {
       }
     },
     itemsSortedComputed() {
-      // console.log(this.itemsSorted)
-      // let result = this.itemsSorted.filter(el =>
-      //   this.$store.state.filters.cardSet.changed.includes(el.set) &&
-      //   this.$store.state.filters.cardClass.changed.includes(el.playerClass) &&
-      //   this.$store.state.filters.cardType.changed.includes(el.type)
-      // );
-      // console.log(result)
-      // return this.itemsSorted;
       return this.itemsSorted.filter(el =>
         this.$store.state.filters.cardSet.changed.includes(el.set) &&
         this.$store.state.filters.cardClass.changed.includes(el.playerClass) &&
@@ -221,6 +213,11 @@ export default {
     }
   },
   created() {
+    let storage = window.localStorage;
+    if(storage.getItem('cardArray') == null) {
+      storage.setItem('cardArray', JSON.stringify(this.$store.state.cardsArray));
+    }
+    this.cardArray = JSON.parse(storage.getItem('cardArray'));
     document.addEventListener("offline", this.onOffline, false);
   }
 }
