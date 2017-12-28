@@ -14,7 +14,8 @@
         Collectable
       </v-ons-list-header>
       <v-ons-list-item>
-        <strong>{{ cardPassed.collectible || 'False' }}</strong>
+        <strong v-show="cardPassed.collectible">Yes</strong>
+        <strong v-show="!cardPassed.collectible">No</strong>
       </v-ons-list-item>
     </v-ons-list>
 

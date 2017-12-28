@@ -1,6 +1,5 @@
 <template>
   <v-ons-page class="menu-container">
-    <v-ons-toolbar modifier="transparent"></v-ons-toolbar>
     <div class="header">
       <v-ons-icon size="90px" icon="fa-cog"></v-ons-icon>
     </div>
@@ -11,6 +10,7 @@
         {{filter.title}}
         <v-ons-icon class="pull-right"
                     icon="fa-plus"
+                    size="20px"
                     :class="{ 'expanded' : filter.expanded }">
         </v-ons-icon>
       </v-ons-list-title>
@@ -18,7 +18,7 @@
       <v-ons-list class="expandable-filter"
                   :class="{ expanded: filter.expanded }">
 
-        <v-ons-list-item v-for="(item, index2) in filter.initial">
+        <v-ons-list-item v-for="(item, index2) in filter.initial" tappable>
           <label class="left">
             <v-ons-checkbox
               v-model='filter.changed'
@@ -107,7 +107,7 @@ export default {
 <style scoped lang="scss">
 .header {
   text-align: center;
-  margin-bottom: 20px;
+  margin: 20px 0;
 }
 
 .page__content {
@@ -129,7 +129,7 @@ export default {
 
 .expandable-filter {
   max-height: 56px;
-  transition: max-height ease-in .6s;
+  transition: max-height cubic-bezier(0.39, 0.58, 0.57, 1) .6s;
   &.expanded {
     max-height: 1000px;
   }
@@ -138,6 +138,30 @@ export default {
 img {
   max-width: 100%;
   width: 80%;
+}
+
+ons-list-title {
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  cursor: default;
+  user-select: none;
+  font-family: -apple-system, 'Helvetica Neue', 'Helvetica', 'Arial', 'Lucida Grande', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  display: block;
+  color: #6d6d72;
+  text-align: left;
+  box-sizing: border-box;
+  padding: 0 0 0 16px;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 24px;
 }
 
 ons-list-item {

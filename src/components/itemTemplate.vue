@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="autocomplete-result">
     <strong>{{ item.name }}
       <small class="pull-right" v-if="item.playerClass">
         <span :class="{priest : item.playerClass == 'PRIEST'}"
@@ -10,7 +10,8 @@
       </small>
     </strong>
     <br>
-    <abbr v-html="item.text"></abbr>
+    <abbr v-html="item.text || 'No description'"></abbr>
+    <span class="mana-cost">{{item.cost || ''}}</span>
   </div>
 </template>
 
@@ -69,8 +70,26 @@ abbr {
   display: block;
   font-size: 13px;
   white-space: nowrap;
-  width: 290px;
+  width: 270px;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.autocomplete-result {
+  position: relative;
+  height: 38px;
+}
+.mana-cost {
+  position: absolute;
+  bottom: -3px;
+  right: 0;
+  font-size: 15px;
+  background: url('../assets/mana.png') no-repeat center center;
+  background-size: cover;
+  width: 20px;
+  height: 20px;
+  color: #fff;
+  text-align: center;
+  line-height: 20px;
+  font-weight: bold;
 }
 </style>

@@ -3,7 +3,7 @@
     <v-ons-toolbar class="home-toolbar">
       <div class="left">
         <v-ons-toolbar-button @click="$store.commit('splitter/toggle')">
-          <v-ons-icon icon="ion-navicon, material:md-menu"></v-ons-icon>
+          <v-ons-icon icon="fa-sliders"></v-ons-icon>
         </v-ons-toolbar-button>
       </div>
 <!--       <div class="right">
@@ -21,7 +21,7 @@
         Card
       </v-ons-list-header>
       <v-ons-list-item>
-        <div class="center">
+        <div class="center autocomplete-container">
           <v-autocomplete v-model='item'
                           :items="itemsSortedComputed"
                           :min-len='0'
@@ -110,6 +110,8 @@ export default {
       cardChosen: {},
       ifCardChosen: false,
       name: '',
+      filters: this.$store.state.filters,
+      autocompleteFocused: false
     }
   },
   firebase: {
@@ -189,7 +191,6 @@ export default {
   },
   watch: {
     cards() {
-      // this.cards = this.cards.reverse();
       this.$forceUpdate();
     },
   },
@@ -206,9 +207,9 @@ export default {
     },
     itemsSortedComputed() {
       return this.itemsSorted.filter(el =>
-        this.$store.state.filters.cardSet.changed.includes(el.set) &&
-        this.$store.state.filters.cardClass.changed.includes(el.playerClass) &&
-        this.$store.state.filters.cardType.changed.includes(el.type)
+        this.filters.cardSet.changed.includes(el.set) &&
+        this.filters.cardClass.changed.includes(el.playerClass) &&
+        this.filters.cardType.changed.includes(el.type)
       );
     }
   },
@@ -219,7 +220,7 @@ export default {
     }
     this.cardArray = JSON.parse(storage.getItem('cardArray'));
     document.addEventListener("offline", this.onOffline, false);
-  }
+  },
 }
 </script>
 
@@ -236,12 +237,20 @@ export default {
   padding: 10px;
 }
 
+.autocomplete-container {
+  margin-right: 15px;
+  padding-right: 0;
+}
+
 .recently-searched {
   max-height: 300px;
   overflow: auto;
   .recently-searched-container {
     display: flex;
     flex-direction: column-reverse;
+  }
+  small {
+    padding-right: 15px;
   }
 }
 
