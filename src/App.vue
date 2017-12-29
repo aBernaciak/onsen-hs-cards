@@ -34,25 +34,35 @@ export default {
     HomePage,
     MenuPage
   },
+  beforeDestroy() {
+    window.localStorage.setItem('settings', JSON.stringify(this.$store.state.filters));
+  },
+  mounted() {
+    let storage = window.localStorage;
+    if( storage.getItem('settings') != null) {
+        this.$store.commit('updateFilters', JSON.parse(storage.getItem('settings')));
+        console.log(JSON.parse(storage.getItem('settings')).cardSet.changed)
+    }
+  }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
+// transition events for components
 .fade-enter-active {
   transition: all .3s ease;
 }
 .fade-leave-active {
   transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
 }
-.fade-enter, .fade-leave-to
-/* .slide-fade-leave-active below version 2.1.8 */ {
+.fade-enter, .fade-leave-to {
   transform: translateX(10px);
   opacity: 0;
 }
 ons-splitter-side[side=left][animation=overlay] {
   border-right: 1px solid #BBB;
 }
+
 .list-header {
   margin: 0;
   list-style: none;
@@ -74,6 +84,8 @@ ons-splitter-side[side=left][animation=overlay] {
   background-image: -webkit-linear-gradient(bottom, #ccc, #ccc 100%);
   background-image: linear-gradient(0deg, #ccc, #ccc 100%);
 }
+
+// autocomplete custom styles
 .v-autocomplete {
   width: 100%;
   input {
@@ -101,5 +113,10 @@ ons-splitter-side[side=left][animation=overlay] {
       }
     }
   }
+}
+
+//helper classes
+.no-padding {
+  padding: 0 !important;
 }
 </style>

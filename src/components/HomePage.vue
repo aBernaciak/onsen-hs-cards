@@ -31,13 +31,14 @@
                           :auto-select-one-item="false"
                           @item-selected="itemSelected"
                           @update-items='update'
-                          :input-attrs="{ name: 'input-test',
-                                         id: 'v-my-autocomplete',
-                                         'class': 'search-input search-input--material'}">
+                          :input-attrs="{ placeholder: 'Start typing card name..', 
+                                          name: 'input-test',
+                                          id: 'v-my-autocomplete',
+                                          'class': 'search-input search-input--material' }">
           </v-autocomplete>
         </div>
       </v-ons-list-item>
-      <v-ons-list-item>
+      <v-ons-list-item class="no-padding">
 
         <div class="center">
 
