@@ -31,7 +31,7 @@
                           :auto-select-one-item="false"
                           @item-selected="itemSelected"
                           @update-items='update'
-                          :input-attrs="{ placeholder: 'Start typing card name..', 
+                          :input-attrs="{ placeholder: 'Start typing card name..',
                                           name: 'input-test',
                                           id: 'v-my-autocomplete',
                                           'class': 'search-input search-input--material' }">
@@ -215,7 +215,7 @@ export default {
     }
   },
   created() {
-    let storage = window.localStorage;
+    var storage = window.localStorage;
     if(storage.getItem('cardArray') == null) {
       storage.setItem('cardArray', JSON.stringify(this.$store.state.cardsArray));
     }

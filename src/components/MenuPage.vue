@@ -2,6 +2,9 @@
   <v-ons-page class="menu-container">
     <div class="header">
       <v-ons-icon size="90px" icon="fa-cog"></v-ons-icon>
+      <small class="author-container">
+        Application by Aleksy Bernaciak
+      </small>
     </div>
 
     <div class="filters-container" v-for="(filter, index1) in filters">
@@ -64,7 +67,7 @@ export default {
           switchOn: false
         },
       ],
-      filters: this.$store.state.filters
+      filters: null
     }
   },
   methods: {
@@ -78,16 +81,8 @@ export default {
   watch: {
     filters: {
       handler(newVal) {
-        // const containsAll = (arr1, arr2) => arr2.every(arr2Item => arr1.includes(arr2Item))
-        // const sameMembers = (arr1, arr2) => containsAll(arr1, arr2) && containsAll(arr2, arr1);
         this.$store.commit('updateFilters', newVal);
-        console.log(this.$store.state.filters)
-        // if(sameMembers(newVal.cardSet.changed, newVal.cardSet.initial)) {
-        //   this.$store.commit('updateFilters', newVal.cardSet.changed, 'cardSet');
-        // }
-        // if(sameMembers(newVal.cardClass.changed, newVal.cardClass.initial)) {
-        //   this.$store.commit('updateFilters', newVal.cardClass.changed, 'cardClass');
-        // }
+        window.localStorage.setItem('settings', JSON.stringify(this.$store.state.filters));
       },
       deep: true
     }
@@ -98,6 +93,17 @@ export default {
       return result.charAt(0).toUpperCase() + result.slice(1);
     }
   },
+  created() {
+    let storage = window.localStorage;
+    let settings = storage.getItem('settings')
+    if( settings != null) {
+      this.$store.commit('updateFilters', JSON.parse(settings));
+      this.filters = this.$store.state.filters;
+    }
+    else {
+      this.filters = this.$store.state.filters;
+    }
+  }
 }
 </script>
 
@@ -114,7 +120,7 @@ export default {
 }
 
 .filter-header {
-  padding-right: 10px;
+  padding: 5px 10px 5px 16px;
   ons-icon {
     transition: all ease-in .4s;
     &.expanded {
@@ -143,7 +149,7 @@ ons-list-title {
   margin: 0;
   font: inherit;
   color: inherit;
-  background: transparent;
+  background: #eee;
   border: none;
   cursor: default;
   user-select: none;

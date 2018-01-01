@@ -15,6 +15,9 @@
     },
     "cordova-plugin-network-information": {
       "PACKAGE_NAME": "io.cordova.hschecker"
+    },
+    "cordova-plugin-nativestorage": {
+      "PACKAGE_NAME": "io.cordova.hschecker"
     }
   },
   "dependent_plugins": {}

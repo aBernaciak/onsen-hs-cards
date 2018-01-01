@@ -16,7 +16,8 @@ export default {
   props: ['ifChosenPassed', 'imgSrcPassed'],
   methods: {
     imageLoadError() {
-      this.$ons.notification.toast('This card doesn\'t have an art or there is no Internet Connection.', {timeout: 2000});
+      this.$ons.notification.toast('Error: no card art or there is no Internet Connection.', {timeout: 2000});
+      this.imgSrcPassed = '/static/cardback_0.png';
     },
   },
   created() {}

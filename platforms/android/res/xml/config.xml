@@ -7,6 +7,9 @@
     <feature name="NetworkStatus">
         <param name="android-package" value="org.apache.cordova.networkinformation.NetworkManager" />
     </feature>
+    <feature name="NativeStorage">
+        <param name="android-package" value="NativeStorage" />
+    </feature>
     <name>Hearthstone Card Checker</name>
     <description>
       App by Aleksy Bernaciak

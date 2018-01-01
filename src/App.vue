@@ -34,16 +34,6 @@ export default {
     HomePage,
     MenuPage
   },
-  beforeDestroy() {
-    window.localStorage.setItem('settings', JSON.stringify(this.$store.state.filters));
-  },
-  mounted() {
-    let storage = window.localStorage;
-    if( storage.getItem('settings') != null) {
-        this.$store.commit('updateFilters', JSON.parse(storage.getItem('settings')));
-        console.log(JSON.parse(storage.getItem('settings')).cardSet.changed)
-    }
-  }
 }
 </script>
 
