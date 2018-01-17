@@ -161,14 +161,9 @@ export default {
             return el.name == name;
           }
         });
-        if (this.cardChosen.length == 0) {
-          this.$ons.notification.toast('We couldn\'t find that card.', {timeout: 2000});
-        }
-        else {
-          this.cardChosenComputed.src = `
-            https://art.hearthstonejson.com/v1/render/latest/${this.langChosen}/256x/${this.cardChosenComputed.id}.png`;
-          this.ifCardChosen = true;
-        }
+        this.cardChosenComputed.src = `
+          https://art.hearthstonejson.com/v1/render/latest/${this.langChosen}/256x/${this.cardChosenComputed.id}.png`;
+        this.ifCardChosen = true;
       }
     },
     changeLanguage(lang) {

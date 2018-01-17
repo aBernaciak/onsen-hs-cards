@@ -43,7 +43,7 @@ export default {
       backface-visibility: hidden;
     }
     &.card-flipped {
-      transition: opacity 0.5s linear;
+      transition: opacity .5s linear;
       transform: rotateY(180deg);
       transform: rotate3d(0, 1, 0, 180deg);
     }

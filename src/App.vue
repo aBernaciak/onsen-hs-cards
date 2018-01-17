@@ -52,6 +52,13 @@ export default {
 ons-splitter-side[side=left][animation=overlay] {
   border-right: 1px solid #BBB;
 }
+ons-splitter-side {
+  background-color: #f9f9f9 !important;
+}
+
+p {
+  margin: 12px 0 0;
+}
 
 .list-header {
   margin: 0;
