@@ -6,35 +6,35 @@
           <v-ons-icon icon="fa-sliders"></v-ons-icon>
         </v-ons-toolbar-button>
       </div>
-<!--       <div class="right">
-        <v-ons-toolbar-button @click="actionSheetVisible = true">
-          <v-ons-icon icon="ion-navicon, material:md-menu"></v-ons-icon>
-        </v-ons-toolbar-button>
-      </div> -->
     </v-ons-toolbar>
 
-    <div class="header">
+    <div class="header" :class="{ 'header-hidden': headerHidden }">
       <img src="../assets/game-logo-hearthstone.png" class="hs-logo">
     </div>
-    <v-ons-list>
+
+    <v-ons-list class="text">
       <v-ons-list-header>
         Card
       </v-ons-list-header>
       <v-ons-list-item>
+        <div class="popover" :class="{ shown: popover.shown }">{{popover.message}}</div>
         <div class="center autocomplete-container">
           <v-autocomplete v-model='item'
-                          :items="itemsSortedComputed"
-                          :min-len='0'
-                          :wait='100'
-                          :get-label="getLabel"
-                          :component-item='template'
-                          :auto-select-one-item="false"
-                          @item-selected="itemSelected"
+                          @item-selected='itemSelected'
                           @update-items='update'
+                          @focus='inputFocused'
+                          @change='showPopover'
+                          :items="itemsSortedComputed"
+                          :min-len='3'
+                          :wait='300'
+                          :get-label='getLabel'
+                          :component-item='template'
+                          :auto-select-one-item='false'
                           :input-attrs="{ placeholder: 'Start typing card name..',
                                           name: 'input-test',
                                           id: 'v-my-autocomplete',
                                           'class': 'search-input search-input--material' }">
+
           </v-autocomplete>
         </div>
       </v-ons-list-item>
@@ -47,10 +47,12 @@
                        size="35px"
                        style="color: red" icon="fa-times"
                        class="close-icon">
+
           </v-ons-icon>
           <transition name="fade">
             <CardImage v-bind:ifChosenPassed="ifCardChosen"
                        v-bind:imgSrcPassed="imgChosen">
+
             </CardImage>
           </transition>
 
@@ -61,6 +63,7 @@
       <transition name="fade">
         <CardDesc v-bind:ifChosenPassed="ifCardChosen"
                   v-bind:cardPassed="cardChosenComputed">
+
         </CardDesc>
       </transition>
     </v-ons-list>
@@ -77,15 +80,6 @@
         </div>
       </v-ons-list>
     </transition>
-
-    <v-ons-action-sheet :visible.sync="actionSheetVisible" cancelable title="Change language">
-      <v-ons-action-sheet-button icon="md-square-o" v-for="(lang, index) in langArray" @click="changeLanguage(lang)">
-        {{lang}}
-      </v-ons-action-sheet-button>
-      <v-ons-action-sheet-button icon="md-square-o"  modifier="destructive">
-        Close
-      </v-ons-action-sheet-button>
-    </v-ons-action-sheet>
   </v-ons-page>
 </template>
 
@@ -101,28 +95,41 @@ export default {
   components: {CardImage, CardDesc},
   data () {
     return {
-      item: '',
+      item: null,
       itemsSorted: [],
       template: ItemTemplate,
-      actionSheetVisible: false,
       cardArray: null,
-      langArray: ['enUS', 'plPL', 'DeDE'],
-      langChosen: 'enUS',
       cardChosen: {},
-      ifCardChosen: false,
       name: '',
       filters: this.$store.state.filters,
-      autocompleteFocused: false
+      actionSheetVisible: false,
+      ifCardChosen: false,
+      autocompleteFocused: false,
+      popover: {
+        shown: false,
+        message: ''
+      },
+      headerHidden: false
     }
   },
   firebase: {
     cards: db.ref('cards-viewed')
   },
   methods: {
-    clearCard(){
+    showPopover(text) {
+      if (text.length < 3) {
+        this.popover = { shown: true, message: 'Type at least 3 letters..'}
+      }
+    },
+    inputFocused(text) {
+      this.headerHidden = true;
+    },
+    clearCard() {
       this.ifCardChosen = false;
+      this.headerHidden = false;
       this.itemsSorted = [];
       this.item = '';
+      this.cardChosen = {};
     },
     setRecently(card) {
       this.cardChosen = [card];
@@ -134,22 +141,20 @@ export default {
     },
     update (text) {
       var itamz = this.cardArray;
-      if(text.length >= 3) {
-        this.itemsSorted = [];
-        this.itemsSorted = itamz.filter((item) => {
-          if(item.name != undefined) {
-            return (new RegExp(text.toLowerCase())).test(item.name.toLowerCase())
-          }
-        })
-      }
-      else if (text.length == 0) {
-        this.ifCardChosen = false;
-        this.item = '';
-        this.itemsSorted = [];
+      this.popover.shown = false;
+      this.itemsSorted = [];
+      this.itemsSorted = itamz.filter((item) => {
+        if(item.name != undefined) {
+          return (new RegExp(text.toLowerCase())).test(item.name.toLowerCase())
+        }
+      })
+
+      if(!this.itemsSorted.length) {
+        this.popover = { shown: true, message: 'No results.'}
       }
     },
     getLabel (item) {
-      return item.name;
+      return null;
     },
     search(name) {
       this.ifCardChosen = false;
@@ -162,22 +167,9 @@ export default {
           }
         });
         this.cardChosenComputed.src = `
-          https://art.hearthstonejson.com/v1/render/latest/${this.langChosen}/256x/${this.cardChosenComputed.id}.png`;
+          https://art.hearthstonejson.com/v1/render/latest/enUS/256x/${this.cardChosenComputed.id}.png`;
         this.ifCardChosen = true;
       }
-    },
-    changeLanguage(lang) {
-      this.langChosen = lang;
-    },
-    getCardByLang(){
-      // this.axios.get(`https://api.hearthstonejson.com/v1/latest/${this.langChosen}/cards.json`)
-      // .then(response => {
-      //   this.cardArray = response.data;
-      // })
-      // .catch(e => {
-      //   this.$ons.notification.toast(`Something went wrong: ${e}`);
-      // })
-      // this.$store.commit('updateCards', ['asd','fasf','asds']);
     },
     onOffline() {
       this.$ons.notification.alert(`
@@ -189,6 +181,9 @@ export default {
     cards() {
       this.$forceUpdate();
     },
+    itemy(oldVal, newVal) {
+      console.log(oldVal, newVal, 'asd')
+    }
   },
   computed: {
     cardChosenComputed() {
@@ -224,6 +219,10 @@ export default {
 <style scoped lang="scss">
 .header {
   text-align: center;
+  transition: all ease-in 0.3s;
+  &.header-hidden {
+    margin-top: -96px;
+  }
 }
 
 .close-icon {
@@ -265,5 +264,42 @@ ons-card {
 
 ons-list-item, ons-card {
   cursor: pointer;
+}
+
+.popover {
+  background-color: rgba(0, 0, 0, 0.85);
+  border-radius: 5px;
+  top: -12px;
+  -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+  color: #fff;
+  display: none;
+  font-size: 12px;
+  font-family: 'Helvetica',sans-serif;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 10px;
+  position: absolute;
+  width: 200px;
+  text-align: center;
+
+  &:before {
+    border-top: 7px solid rgba(0,0,0,0.85);
+    border-right: 7px solid transparent;
+    border-left: 7px solid transparent;
+    bottom: -7px;
+    content: '';
+    display: block;
+    left: 50%;
+    margin-left: -7px;
+    position: absolute;
+  }
+
+  &.shown {
+    display: block;
+    -webkit-animation: fade-in .3s linear 1, move-up .3s linear 1;
+    -moz-animation: fade-in .3s linear 1, move-up .3s linear 1;
+    -ms-animation: fade-in .3s linear 1, move-up .3s linear 1;
+  }
 }
 </style>

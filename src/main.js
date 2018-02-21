@@ -1,5 +1,6 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+//eśli używasz vue-cli >3.0.0, to rzeczy domyślnie interpretowane jako moduł dołączysz poprzez `@/assets/...` natomiast jeśli nie są domyślnie traktowane jako moduł (np. url()), to poprzez `~@/assets/...`. Tylda wymusza traktowanie ścieżki jako moduł.
 import 'onsenui/css/onsenui.css'
 import 'onsenui/css/onsen-css-components.css'
 

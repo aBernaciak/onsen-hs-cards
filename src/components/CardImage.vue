@@ -1,10 +1,11 @@
 <template>
-  <div class="card-container" :class="{flipped : ifChosenPassed}">
+  <div class="card-container" :class="{flipped : ifChosen}">
     <img src="../assets/cardback_0.png" alt="" class="card-initial">
 
     <img :src="imgSrcPassed"
          @error="imageLoadError"
          class="card-flipped"
+         :class="{hidden: !ifChosen}"
          v-if="ifChosenPassed">
 
     <img src="../assets/cardback_0.png" class="card-flipped "alt="" v-else>
@@ -14,13 +15,22 @@
 <script>
 export default {
   props: ['ifChosenPassed', 'imgSrcPassed'],
+  data () {
+    return {
+      ifChosen: this.ifChosenPassed
+    }
+  },
   methods: {
-    imageLoadError() {
-      this.$ons.notification.toast('Error: no card art or there is no Internet Connection.', {timeout: 2000});
-      this.imgSrcPassed = '/static/cardback_0.png';
+    imageLoadError(asd) {
+      this.$ons.notification.alert('Error: no card art or there is no Internet Connection.');
+      this.ifChosen = false;
     },
   },
-  created() {}
+  watch: {
+    ifChosenPassed(newVal){
+      this.ifChosen = newVal;
+    }
+  }
 }
 </script>
 
@@ -46,6 +56,9 @@ export default {
       transition: opacity .5s linear;
       transform: rotateY(180deg);
       transform: rotate3d(0, 1, 0, 180deg);
+      &.hidden {
+        opacity:  0;
+      }
     }
   }
 }

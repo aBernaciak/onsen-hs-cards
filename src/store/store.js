@@ -13,7 +13,6 @@ export default new Vuex.Store({
     cardsArray: Cards,
     cardsViewed: db.ref('cards-viewed'),
     showRecent: false,
-    showCredits: true,
     filters: {
       cardSet: {
         title: 'Card Set Filters',
@@ -41,9 +40,6 @@ export default new Vuex.Store({
     },
     updateShowRecent(state, newState) {
       return state.showRecent = !newState;
-    },
-    updateShowCredits(state, newState) {
-      return state.showCredits = !newState;
     },
     updateFilters(state, newFilters) {
       return state.filters = newFilters;

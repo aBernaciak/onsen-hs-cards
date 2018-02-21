@@ -1,7 +1,10 @@
 <template>
   <v-ons-page class="menu-container">
     <div class="header">
-      <v-ons-icon size="90px" icon="fa-cog"></v-ons-icon>
+      <v-ons-icon size="90px"
+                  icon="fa-cog">
+
+      </v-ons-icon>
     </div>
 
     <div class="filters-container"
@@ -62,6 +65,7 @@
 
           <v-ons-dialog cancelable
                         :visible.sync="item.visible">
+
             <div class="credits-container">
               <strong>Hearthstone®</strong>
               <p>
@@ -109,13 +113,25 @@ export default {
     },
     toggleDropdown(filter) {
       this.filters[filter].expanded = !this.filters[filter].expanded;
+    },
+    bindData() {
+      let storage = window.localStorage;
+      let localFilters = storage.getItem('localFilters');
+
+      if( localFilters != null) {
+        this.$store.commit('updateFilters', JSON.parse(localFilters));
+        this.filters = this.$store.state.filters;
+      }
+      else {
+        this.filters = this.$store.state.filters;
+      }
     }
   },
   watch: {
     filters: {
       handler(newVal) {
         this.$store.commit('updateFilters', newVal);
-        window.localStorage.setItem('settings', JSON.stringify(this.$store.state.filters));
+        window.localStorage.setItem('localFilters', JSON.stringify(this.$store.state.filters));
       },
       deep: true
     }
@@ -123,19 +139,12 @@ export default {
   filters: {
     downcase(text) {
       let result  = text.toLowerCase().replace(/[_]/g, " ");
+
       return result.charAt(0).toUpperCase() + result.slice(1);
     }
   },
   created() {
-    let storage = window.localStorage;
-    let settings = storage.getItem('settings')
-    if( settings != null) {
-      this.$store.commit('updateFilters', JSON.parse(settings));
-      this.filters = this.$store.state.filters;
-    }
-    else {
-      this.filters = this.$store.state.filters;
-    }
+    this.bindData();
   }
 }
 </script>
